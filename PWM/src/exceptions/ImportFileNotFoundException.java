@@ -1,7 +1,11 @@
 package exceptions;
 
 public class ImportFileNotFoundException extends Exception {
-	 public ImportFileNotFoundException(){
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public ImportFileNotFoundException(){
 		 super();
 	 }
 	 public ImportFileNotFoundException(String mes){

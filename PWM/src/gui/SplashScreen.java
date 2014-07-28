@@ -59,26 +59,11 @@ public class SplashScreen implements PropertyChangeListener, WindowListener{
 	  }
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SplashScreen window = new SplashScreen();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
 	public SplashScreen() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -151,7 +136,6 @@ public class SplashScreen implements PropertyChangeListener, WindowListener{
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		System.out.println(arg0.toString());
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	    // Instances of javax.swing.SwingWorker are not reusuable, so
 	    // we create new instances as needed.

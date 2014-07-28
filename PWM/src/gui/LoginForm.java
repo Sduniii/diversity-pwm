@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -16,8 +15,6 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXLoginPane;
-
-import com.thehowtotutorial.splashscreen.JSplash;
 
 
 public class LoginForm {
@@ -97,26 +94,7 @@ public class LoginForm {
 		frame.getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
 	}
 	private void createActions() {
-		JSplash splash = new JSplash(LoginForm.class.getResource("/images/fatalgrs.jpg"), true, true, false, "DSP", null, Color.BLACK, Color.green);
-		splash.splashOn();
-		for(int i=0; i<5; i++){
-			try {
-				splash.setProgress(20, "aaaaaaa");
-				Thread.sleep(100);
-				splash.setProgress(40, "bbbbbb");
-				Thread.sleep(100);
-				splash.setProgress(60, "ccccccc");
-				Thread.sleep(100);
-				splash.setProgress(80, "dddddd");
-				Thread.sleep(100);
-				splash.setProgress(100, "eeeeeee");
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		splash.splashOff();
+		frame.dispose();
+		new SplashScreen();
 	}
 }
