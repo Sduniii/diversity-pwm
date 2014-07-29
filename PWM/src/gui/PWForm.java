@@ -41,6 +41,7 @@ public class PWForm {
 	private String pass;
 	private File file;
 	private JXButton btnSpeichern;
+	private JXTable table;
 
 	// /**
 	// * Create the application.
@@ -201,7 +202,7 @@ public class PWForm {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 414, 217);
 		panel.add(scrollPane);
-		JXTable table = new JXTable();
+		table = new JXTable();
 		table.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
