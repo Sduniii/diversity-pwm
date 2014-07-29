@@ -54,9 +54,10 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					long progress = 0;
 					setProgress(0);
 					lblNone.setText("lese...");
-					long fullProgress = file.length();
+					long fullProgress = file.length()-1;
 					BufferedReader br = new BufferedReader(new FileReader(file));
 					//System.out.println(br.readLine());
+					fullProgress -= br.readLine().length();
 					progress++;
 					setProgress(Math.min((int) (progress * 100 / fullProgress),
 							100));
@@ -64,18 +65,22 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					int ch;
 					String temp = "";
 					while ((ch = br.read()) != -1) {
+						//if(temp == "") System.out.println((char)ch);
 						temp += (char)ch;
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 99));
 						label.setText((progress * 100 / fullProgress) + "%");
+						//if(progress == fullProgress) System.out.println((char)ch);
 					}
 					br.close();
+					//System.out.println(temp);
 					lblNone.setText("entschlüssele...");
 					progress = 0;
 					fullProgress = temp.length()-1;
 					setProgress(0);
 					temp = AES.decode(pass, temp);
+					//System.out.println(temp);
 					String temp2 = "";
 					for(int i = 0; i< temp.length(); i++){
 						if(temp.charAt(i) == '|'){
@@ -84,11 +89,13 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						}else{
 							temp2 += temp.charAt(i);
 						}
+						if(i == temp.length()-1)allDecrypt.add(AES.decode(pass, temp2));
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 100));
 						label.setText((progress * 100 / fullProgress) + "%");
 					}
+					//System.out.println(allDecrypt.size());
 				} else{
 					int progress = 0;
 					setProgress(0);
@@ -110,9 +117,8 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						String t = it.next();
 						if(it.hasNext()) temp += AES.encode(pass, t) + "|";
 						else temp += AES.encode(pass, t);
-						Thread.sleep(5);
 					}
-					//System.out.println(temp);
+					//System.out.println(temp.split("\\|").length);
 					progress++;
 					bw.write(AES.encode(pass, temp));
 					bw.close();
@@ -121,7 +127,7 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					label.setText((progress * 100 / fullProgress) + "%");
 				}
 				return null;
-			} catch (IOException | InterruptedException ex) {
+			} catch (IOException ex) {
 				return null;
 			}
 		}
@@ -159,16 +165,12 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		this.allDecrypt = new LinkedList<String>();
 		initialize();
 		lblNone.setText("lade...");
-		
-		JXLabel lblSasad = new JXLabel();
-		lblSasad.setIcon(new ImageIcon(SplashScreen.class.getResource("/images/s!logo.png")));
-		lblSasad.setBounds(10, 11, 430, 238);
-		frame.getRootPaneExt().getContentPane().add(lblSasad);
 		frame.setVisible(true);
 	}
 
 	public SplashScreen(String pass, File file, LinkedList<String> toSave) {
 		this.toSave = toSave;
+		//System.out.println(toSave.size());
 		this.save = true;
 		this.pass = pass;
 		this.file = file;
@@ -212,6 +214,11 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		lblNone.setText("speichern...");
 		lblNone.setBounds(10, 260, 63, 14);
 		frame.getRootPaneExt().getContentPane().add(lblNone);
+		
+		JXLabel lblSasad = new JXLabel();
+		lblSasad.setIcon(new ImageIcon(SplashScreen.class.getResource("/images/s!logo.png")));
+		lblSasad.setBounds(10, 11, 430, 238);
+		frame.getRootPaneExt().getContentPane().add(lblSasad);
 	}
 
 	@Override

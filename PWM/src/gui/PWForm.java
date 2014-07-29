@@ -8,6 +8,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,32 +40,32 @@ public class PWForm {
 	private DefaultTableModel model;
 	private String pass;
 	private File file;
+	private JXButton btnSpeichern;
+
+	// /**
+	// * Create the application.
+	// */
+	// public PWForm() {
+	// initialize();
+	// frmPwm.setVisible(true);
+	// }
 
 	/**
 	 * Create the application.
 	 */
-	public PWForm() {
-		initialize();
-		frmPwm.setVisible(true);
-	}
-	
-	/**
-	 * Create the application.
-	 */
-	public PWForm(LinkedList<String> list,String pass, File file) {
+	public PWForm(LinkedList<String> list, String pass, File file) {
 		this.file = file;
 		this.pass = pass;
-		//System.out.println(pass);
+		// System.out.println(pass);
 		initialize();
 		Iterator<String> it = list.iterator();
-		try{
-		while (it.hasNext()) {
-			model.addRow(new Object[] { it.next(), it.next(),
-					it.next() });
-		}
-		}catch(Exception ex){
+		try {
+			while (it.hasNext()) {
+				model.addRow(new Object[] { it.next(), it.next(), it.next() });
+			}
+		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(frmPwm,
-					"gespeicherte Datei ist evtl defekt!", "Fehler",
+					"gespeicherte Datei ist evtl. defekt!", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
 		}
 		frmPwm.setVisible(true);
@@ -82,7 +84,8 @@ public class PWForm {
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		frmPwm = new JXFrame();
-		frmPwm.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
+		frmPwm.setIconImage(Toolkit.getDefaultToolkit().getImage(
+				LoginForm.class.getResource("/images/s!logo.png")));
 		frmPwm.setTitle("PWM");
 		frmPwm.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -166,6 +169,7 @@ public class PWForm {
 							model.addRow(new Object[] { it.next(), it.next(),
 									it.next() });
 						}
+						btnSpeichern.setEnabled(true);
 					}
 				} catch (ImportFileNotFoundException ex) {
 					System.out.println(ex.getMessage());
@@ -183,7 +187,7 @@ public class PWForm {
 		frmPwm.getRootPaneExt().getContentPane()
 				.add(panel, BorderLayout.CENTER);
 
-		JXButton btnSpeichern = new JXButton();
+		btnSpeichern = new JXButton();
 		btnSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				saveButtonClicked();
@@ -192,11 +196,20 @@ public class PWForm {
 		btnSpeichern.setBounds(10, 239, 79, 23);
 		panel.add(btnSpeichern);
 		btnSpeichern.setText("Speichern");
+		btnSpeichern.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 414, 217);
 		panel.add(scrollPane);
 		JXTable table = new JXTable();
+		table.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if ("tableCellEditor".equals(evt.getPropertyName())) {
+					btnSpeichern.setEnabled(true);
+				}
+			}
+		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
 		model = new DefaultTableModel(new Object[][] {}, new String[] {
@@ -205,6 +218,11 @@ public class PWForm {
 		scrollPane.setViewportView(table);
 
 		JXButton btnNeu = new JXButton();
+		btnNeu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				model.addRow(new Object[] {"","",""});
+			}
+		});
 		btnNeu.setText("Neu");
 		btnNeu.setBounds(99, 239, 51, 23);
 		panel.add(btnNeu);
@@ -212,14 +230,15 @@ public class PWForm {
 
 	protected void saveButtonClicked() {
 		LinkedList<String> tr = new LinkedList<>();
-		for(int i = 0; i< model.getRowCount(); i++){
-			for(int j = 0; j < model.getColumnCount(); j++){
+		for (int i = 0; i < model.getRowCount(); i++) {
+			for (int j = 0; j < model.getColumnCount(); j++) {
 				tr.add(model.getValueAt(i, j).toString());
-				//System.out.println(tr.getLast());
+				// System.out.println(tr.getLast());
 			}
 		}
+		// System.out.println(tr.size());
 		frmPwm.dispose();
 		new SplashScreen(pass, file, tr);
-		
+
 	}
 }
