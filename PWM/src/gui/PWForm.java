@@ -26,19 +26,16 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
-import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTable;
 
 import tools.FileOpener;
 import tools.HTMLParser;
-import components.JStatusBar;
 import exceptions.ImportFileNotFoundException;
 
 public class PWForm {
 
 	private JXFrame frmPwm;
 	private DefaultTableModel model;
-	private JStatusBar statusBar;
 	private String pass;
 	private File file;
 
@@ -136,7 +133,7 @@ public class PWForm {
 
 			}
 		});
-		frmPwm.setBounds(100, 100, 450, 351);
+		frmPwm.setBounds(100, 100, 450, 328);
 		frmPwm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
@@ -211,11 +208,6 @@ public class PWForm {
 		btnNeu.setText("Neu");
 		btnNeu.setBounds(99, 239, 51, 23);
 		panel.add(btnNeu);
-
-		statusBar = new JStatusBar();
-		statusBar.setLeftComponent(new JXLabel("Ready"));
-		frmPwm.getRootPaneExt().getContentPane()
-				.add(statusBar, BorderLayout.SOUTH);
 	}
 
 	protected void saveButtonClicked() {
