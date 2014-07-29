@@ -1,13 +1,14 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -15,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -37,28 +39,37 @@ public class PWForm {
 	private JXFrame frmPwm;
 	private DefaultTableModel model;
 	private JStatusBar statusBar;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PWForm window = new PWForm();
-					window.frmPwm.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private String pass;
+	private File file;
 
 	/**
 	 * Create the application.
 	 */
 	public PWForm() {
 		initialize();
+		frmPwm.setVisible(true);
+	}
+	
+	/**
+	 * Create the application.
+	 */
+	public PWForm(LinkedList<String> list,String pass, File file) {
+		this.file = file;
+		this.pass = pass;
+		//System.out.println(pass);
+		initialize();
+		Iterator<String> it = list.iterator();
+		try{
+		while (it.hasNext()) {
+			model.addRow(new Object[] { it.next(), it.next(),
+					it.next() });
+		}
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(frmPwm,
+					"gespeicherte Datei ist evtl defekt!", "Fehler",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		frmPwm.setVisible(true);
 	}
 
 	/**
@@ -74,6 +85,7 @@ public class PWForm {
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		frmPwm = new JXFrame();
+		frmPwm.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
 		frmPwm.setTitle("PWM");
 		frmPwm.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -175,6 +187,11 @@ public class PWForm {
 				.add(panel, BorderLayout.CENTER);
 
 		JXButton btnSpeichern = new JXButton();
+		btnSpeichern.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				saveButtonClicked();
+			}
+		});
 		btnSpeichern.setBounds(10, 239, 79, 23);
 		panel.add(btnSpeichern);
 		btnSpeichern.setText("Speichern");
@@ -199,5 +216,18 @@ public class PWForm {
 		statusBar.setLeftComponent(new JXLabel("Ready"));
 		frmPwm.getRootPaneExt().getContentPane()
 				.add(statusBar, BorderLayout.SOUTH);
+	}
+
+	protected void saveButtonClicked() {
+		LinkedList<String> tr = new LinkedList<>();
+		for(int i = 0; i< model.getRowCount(); i++){
+			for(int j = 0; j < model.getColumnCount(); j++){
+				tr.add(model.getValueAt(i, j).toString());
+				//System.out.println(tr.getLast());
+			}
+		}
+		frmPwm.dispose();
+		new SplashScreen(pass, file, tr);
+		
 	}
 }

@@ -40,7 +40,7 @@ public class AES {
 			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 			byte[] encrypted = cipher.doFinal(mes.getBytes());
 
-			return Base64.getMimeEncoder().encodeToString(encrypted);
+			return Base64.getUrlEncoder().encodeToString(encrypted);
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException
 				| InvalidKeyException | IllegalBlockSizeException
 				| BadPaddingException | UnsupportedEncodingException e) {
@@ -67,8 +67,7 @@ public class AES {
 			cipher2 = Cipher.getInstance("AES/ECB/PKCS5PADDING");
 
 			cipher2.init(Cipher.DECRYPT_MODE, secretKeySpec);
-			byte[] cipherData2 = cipher2.doFinal(Base64.getMimeDecoder()
-					.decode(crypted2));
+			byte[] cipherData2 = cipher2.doFinal(Base64.getUrlDecoder().decode(crypted2));
 
 			return new String(cipherData2);
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException
