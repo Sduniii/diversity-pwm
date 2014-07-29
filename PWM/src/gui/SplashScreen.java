@@ -56,7 +56,7 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					lblNone.setText("lese...");
 					long fullProgress = file.length();
 					BufferedReader br = new BufferedReader(new FileReader(file));
-					System.out.println(br.readLine());
+					//System.out.println(br.readLine());
 					progress++;
 					setProgress(Math.min((int) (progress * 100 / fullProgress),
 							100));
