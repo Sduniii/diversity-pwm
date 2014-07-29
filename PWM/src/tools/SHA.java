@@ -9,23 +9,29 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SHA {
 	
+	public static enum TypeToGiveBack {BYTEARRAY, STRING, HEXSTRING};
+	
 	/** 
      * Calculate the a hash of a given String
      *
      * @param mes the String to hash
      * @param alg what algorithm should be used for hashing (SHA-512,MD5,...)
-     * @param hexHash should give it back a hex string?
+     * @param back which format should give it back?
      * 
-     * @return get back a String as hash
+     * @return get back a Object as hash
      */
-	public static String getHash(String mes, String alg, boolean hexHash) {
+	public static Object getHash(String mes, String alg, TypeToGiveBack back) {
 		try {
 			MessageDigest md = MessageDigest.getInstance(alg);
 			md.update(mes.getBytes());
-			if(hexHash){
+			if(back == TypeToGiveBack.HEXSTRING){
 				return hexHash(md.digest());
-			}else{
+			}else if(back == TypeToGiveBack.STRING){
 				return new String(md.digest());
+			}else if(back == TypeToGiveBack.BYTEARRAY){
+				return md.digest();
+			}else{
+				return null;
 			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
