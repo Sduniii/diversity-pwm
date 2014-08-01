@@ -111,7 +111,8 @@ public class LoginForm {
 
 	private void createActions() {
 		try {
-			File file = new File("D:\\" + loginPane.getUserName() + ".ts");
+			System.out.println(System.getProperty("user.dir")+System.getProperty("file.separator") + loginPane.getUserName() + ".ts");
+			File file = new File(System.getProperty("user.dir")+System.getProperty("file.separator") + loginPane.getUserName() + ".ts");
 			if (loginPane.getBannerText().trim().equals("Anmeldung")) {
 				if (file.exists()) {
 					@SuppressWarnings("resource")

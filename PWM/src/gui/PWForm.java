@@ -8,8 +8,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXButton;
@@ -69,6 +69,14 @@ public class PWForm {
 					"gespeicherte Datei ist evtl. defekt!", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
 		}
+		model.addTableModelListener(new TableModelListener() {
+			
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				btnSpeichern.setEnabled(true);
+				
+			}
+		});
 		frmPwm.setVisible(true);
 	}
 
@@ -203,14 +211,6 @@ public class PWForm {
 		scrollPane.setBounds(10, 11, 414, 217);
 		panel.add(scrollPane);
 		table = new JXTable();
-		table.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if ("tableCellEditor".equals(evt.getPropertyName())) {
-					btnSpeichern.setEnabled(true);
-				}
-			}
-		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
 		model = new DefaultTableModel(new Object[][] {}, new String[] {
