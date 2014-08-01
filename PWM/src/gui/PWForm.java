@@ -227,6 +227,17 @@ public class PWForm {
 		btnNeu.setText("Neu");
 		btnNeu.setBounds(99, 239, 51, 23);
 		panel.add(btnNeu);
+		
+		JXButton btnLschen = new JXButton();
+		btnLschen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(table.getSelectedRow() != -1)
+					model.removeRow(table.getSelectedRow());
+			}
+		});
+		btnLschen.setText("L\u00F6schen");
+		btnLschen.setBounds(160, 239, 71, 23);
+		panel.add(btnLschen);
 	}
 
 	protected void saveButtonClicked() {
