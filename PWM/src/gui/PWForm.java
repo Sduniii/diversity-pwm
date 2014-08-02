@@ -70,11 +70,11 @@ public class PWForm {
 					JOptionPane.ERROR_MESSAGE);
 		}
 		model.addTableModelListener(new TableModelListener() {
-			
+
 			@Override
 			public void tableChanged(TableModelEvent e) {
 				btnSpeichern.setEnabled(true);
-				
+
 			}
 		});
 		frmPwm.setVisible(true);
@@ -221,18 +221,20 @@ public class PWForm {
 		JXButton btnNeu = new JXButton();
 		btnNeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				model.addRow(new Object[] {"","",""});
+				model.addRow(new Object[] { "", "", "" });
 			}
 		});
 		btnNeu.setText("Neu");
 		btnNeu.setBounds(99, 239, 51, 23);
 		panel.add(btnNeu);
-		
+
 		JXButton btnLschen = new JXButton();
 		btnLschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(table.getSelectedRow() != -1)
-					model.removeRow(table.getSelectedRow());
+				if (table.getSelectedRow() != -1)
+					if (JOptionPane.showConfirmDialog(frmPwm, "Löschen",
+							"Passwort löschen?", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+						model.removeRow(table.getSelectedRow());
 			}
 		});
 		btnLschen.setText("L\u00F6schen");
