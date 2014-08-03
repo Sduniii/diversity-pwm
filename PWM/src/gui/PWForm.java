@@ -1,11 +1,15 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -18,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
@@ -185,8 +190,24 @@ public class PWForm {
 				}
 			}
 		});
+
 		mnImport.add(mntmHtml);
 		mnDatei.add(mntmbeenden);
+		
+		JPopupMenu pMenu = new JPopupMenu();
+		JMenuItem mntmCopy = new JMenuItem("Kopieren");
+		mntmCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (table.getSelectedRow() != -1 && table.getSelectedColumn() != -1) {
+					Toolkit.getDefaultToolkit()
+							.getSystemClipboard()
+							.setContents(
+									new StringSelection(table.getStringAt(table.getSelectedRow(), table.getSelectedColumn())),
+									null);
+				}
+			}
+		});
+		pMenu.add(mntmCopy);
 
 		frmPwm.getRootPaneExt().getContentPane()
 				.setLayout(new BorderLayout(0, 0));
@@ -211,6 +232,16 @@ public class PWForm {
 		scrollPane.setBounds(10, 11, 414, 217);
 		panel.add(scrollPane);
 		table = new JXTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == 3) {
+					table.changeSelection(table.rowAtPoint(new Point(e.getX(),e.getY())), table.columnAtPoint(new Point(e.getX(),e.getY())), false, false);
+					// System.out.println(Arrays.toString(pMenu.getKeyListeners()));
+					pMenu.show(table, e.getX(), e.getY());
+				}
+			}
+		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
 		model = new DefaultTableModel(new Object[][] {}, new String[] {
@@ -232,8 +263,9 @@ public class PWForm {
 		btnLschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRow() != -1)
-					if (JOptionPane.showConfirmDialog(frmPwm, "Löschen",
-							"Passwort löschen?", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+					if (JOptionPane.showConfirmDialog(frmPwm,
+							"Passwort l\u00F6schen?", "Löschen",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
 						model.removeRow(table.getSelectedRow());
 			}
 		});
