@@ -74,7 +74,7 @@ public class PWForm {
 			JOptionPane.showMessageDialog(frmPwm,
 					"gespeicherte Datei ist evtl. defekt!", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-		}	
+		}
 		model.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {
@@ -140,7 +140,7 @@ public class PWForm {
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 						onlySave();
-					}else{
+					} else {
 						frmPwm.dispose();
 						System.exit(0);
 					}
@@ -173,8 +173,20 @@ public class PWForm {
 		JMenuItem mntmbeenden = new JMenuItem("Beenden");
 		mntmbeenden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frmPwm.dispose();
-				System.exit(0);
+				if (btnSpeichern.isEnabled()) {
+					if (JOptionPane.showConfirmDialog(frmPwm,
+							"Änderung speichern?", "Speichern",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+						onlySave();
+					} else {
+						frmPwm.dispose();
+						System.exit(0);
+					}
+				} else {
+					frmPwm.dispose();
+					System.exit(0);
+				}
 			}
 		});
 
@@ -203,6 +215,31 @@ public class PWForm {
 		});
 
 		mnImport.add(mntmHtml);
+
+		JMenuItem mntmPasswortndern = new JMenuItem("Passwort \u00E4ndern");
+		mntmPasswortndern.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String s = (String) JOptionPane.showInputDialog(frmPwm,
+						"neues Passwort", "Passwort ändern",
+						JOptionPane.PLAIN_MESSAGE, null, null, "");
+				if (s != null) {
+					if (s.length() >= 6) {
+						pass = s;
+						JOptionPane.showMessageDialog(frmPwm,
+								"Passwort erfolgreich geändert",
+								"Passwort geändert",
+								JOptionPane.INFORMATION_MESSAGE);
+						saveButtonClicked();
+					} else {
+						JOptionPane.showMessageDialog(frmPwm,
+								"Passwort zu klein",
+								"Passwort Fehler",
+								JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+		});
+		mnDatei.add(mntmPasswortndern);
 		mnDatei.add(mntmbeenden);
 
 		JPopupMenu pMenu = new JPopupMenu();
@@ -260,8 +297,8 @@ public class PWForm {
 		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
-		model = new MyTableModel(new Object[][] {}, new String[] {
-				"Location", "User", "Password" });
+		model = new MyTableModel(new Object[][] {}, new String[] { "Location",
+				"User", "Password" });
 		table.setModel(model);
 		scrollPane.setViewportView(table);
 
