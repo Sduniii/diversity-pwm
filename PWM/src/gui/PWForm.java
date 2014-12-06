@@ -31,6 +31,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import models.MyTableModel;
+
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXTable;
@@ -42,7 +44,7 @@ import exceptions.ImportFileNotFoundException;
 public class PWForm {
 
 	private JXFrame frmPwm;
-	private DefaultTableModel model;
+	private MyTableModel model;
 	private String pass;
 	private File file;
 	private JXButton btnSpeichern;
@@ -75,12 +77,9 @@ public class PWForm {
 					JOptionPane.ERROR_MESSAGE);
 		}
 		model.addTableModelListener(new TableModelListener() {
-
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				if (e.getType() == TableModelEvent.UPDATE)
-					btnSpeichern.setEnabled(true);
-
+				btnSpeichern.setEnabled(true);
 			}
 		});
 		frmPwm.setVisible(true);
@@ -142,6 +141,9 @@ public class PWForm {
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 						onlySave();
+					}else{
+						frmPwm.dispose();
+						System.exit(0);
 					}
 				} else {
 					frmPwm.dispose();
@@ -259,7 +261,7 @@ public class PWForm {
 		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
-		model = new DefaultTableModel(new Object[][] {}, new String[] {
+		model = new MyTableModel(new Object[][] {}, new String[] {
 				"Location", "User", "Password" });
 		table.setModel(model);
 		scrollPane.setViewportView(table);
