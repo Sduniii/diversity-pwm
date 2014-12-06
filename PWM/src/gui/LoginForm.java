@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -21,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -108,17 +111,50 @@ public class LoginForm {
 		frame.setBounds(100, 100, 450, 263);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
+		frame.addKeyListener
+	      (new KeyAdapter() {
+	          public void keyPressed(KeyEvent e) {
+	            int key = e.getKeyCode();
+	            if (key == KeyEvent.VK_ENTER) {
+	               createActions();
+	               }
+	            }
+	          }
+	       );
+		
 
 		loginPane = new JXLoginPane();
 		loginPane.setBounds(10, 11, 414, 164);
 		loginPane.setPassword(sPa.toCharArray());
-		ttt = ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
-				.getComponent(0)).getComponent(1)).getComponent(1));
+		JPasswordField ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
+				.getComponent(0)).getComponent(1)).getComponent(1)).getComponent(1);
+		ssss.addKeyListener
+	      (new KeyAdapter() {
+	          public void keyPressed(KeyEvent e) {
+	            int key = e.getKeyCode();
+	            if (key == KeyEvent.VK_ENTER) {
+	               createActions();
+	               }
+	            }
+	          }
+	       );
+		ttt = (JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
+				.getComponent(0)).getComponent(1)).getComponent(1);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("*.ts",
 				"ts");
 		fc.setFileFilter(filter);
 		fc.setDialogTitle("Passwort Datei auswählen");
 		JXButton btnFC = new JXButton();
+		btnFC.addKeyListener
+	      (new KeyAdapter() {
+	          public void keyPressed(KeyEvent e) {
+	            int key = e.getKeyCode();
+	            if (key == KeyEvent.VK_ENTER) {
+	            	createActions();
+	               }
+	            }
+	          }
+	       );
 		btnFC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int returnVal;
