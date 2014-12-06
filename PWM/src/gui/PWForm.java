@@ -78,7 +78,8 @@ public class PWForm {
 
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				btnSpeichern.setEnabled(true);
+				if (e.getType() == TableModelEvent.UPDATE)
+					btnSpeichern.setEnabled(true);
 
 			}
 		});
@@ -98,6 +99,7 @@ public class PWForm {
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		frmPwm = new JXFrame();
+		frmPwm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmPwm.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
 		frmPwm.setTitle("PWM");
@@ -134,13 +136,22 @@ public class PWForm {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
+				if (btnSpeichern.isEnabled()) {
+					if (JOptionPane.showConfirmDialog(frmPwm,
+							"Änderung speichern?", "Speichern",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+						onlySave();
+					}
+				} else {
+					frmPwm.dispose();
+					System.exit(0);
+				}
 
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -151,7 +162,6 @@ public class PWForm {
 			}
 		});
 		frmPwm.setBounds(100, 100, 450, 328);
-		frmPwm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
 		frmPwm.setJMenuBar(menuBar);
@@ -193,17 +203,19 @@ public class PWForm {
 
 		mnImport.add(mntmHtml);
 		mnDatei.add(mntmbeenden);
-		
+
 		JPopupMenu pMenu = new JPopupMenu();
 		JMenuItem mntmCopy = new JMenuItem("Kopieren");
 		mntmCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (table.getSelectedRow() != -1 && table.getSelectedColumn() != -1) {
+				if (table.getSelectedRow() != -1
+						&& table.getSelectedColumn() != -1) {
 					Toolkit.getDefaultToolkit()
 							.getSystemClipboard()
 							.setContents(
-									new StringSelection(table.getStringAt(table.getSelectedRow(), table.getSelectedColumn())),
-									null);
+									new StringSelection(table.getStringAt(
+											table.getSelectedRow(),
+											table.getSelectedColumn())), null);
 				}
 			}
 		});
@@ -236,7 +248,10 @@ public class PWForm {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 3) {
-					table.changeSelection(table.rowAtPoint(new Point(e.getX(),e.getY())), table.columnAtPoint(new Point(e.getX(),e.getY())), false, false);
+					table.changeSelection(
+							table.rowAtPoint(new Point(e.getX(), e.getY())),
+							table.columnAtPoint(new Point(e.getX(), e.getY())),
+							false, false);
 					// System.out.println(Arrays.toString(pMenu.getKeyListeners()));
 					pMenu.show(table, e.getX(), e.getY());
 				}
@@ -253,6 +268,8 @@ public class PWForm {
 		btnNeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				model.addRow(new Object[] { "", "", "" });
+				table.changeSelection(model.getRowCount() - 1, 0, false, false);
+				table.requestFocus();
 			}
 		});
 		btnNeu.setText("Neu");
@@ -285,6 +302,18 @@ public class PWForm {
 		// System.out.println(tr.size());
 		frmPwm.dispose();
 		new SplashScreen(pass, file, tr);
+	}
 
+	protected void onlySave() {
+		LinkedList<String> tr = new LinkedList<>();
+		for (int i = 0; i < model.getRowCount(); i++) {
+			for (int j = 0; j < model.getColumnCount(); j++) {
+				tr.add(model.getValueAt(i, j).toString());
+				// System.out.println(tr.getLast());
+			}
+		}
+		// System.out.println(tr.size());
+		frmPwm.dispose();
+		new SplashScreen(pass, file, tr, true);
 	}
 }

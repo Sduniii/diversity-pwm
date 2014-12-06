@@ -108,7 +108,7 @@ public class LoginForm {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
 		frame.setTitle("Anmelden");
-		frame.setBounds(100, 100, 450, 263);
+		frame.setBounds(100, 100, 440, 266);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
 		frame.addKeyListener

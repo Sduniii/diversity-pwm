@@ -42,6 +42,7 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 	private JXLabel lblNone;
 	private LinkedList<String> toSave;
 	private boolean save = false;
+	private boolean onlySave = false;
 
 	class Task extends SwingWorker<Void, Void> {
 		/*
@@ -137,12 +138,17 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		 */
 		@Override
 		public void done() {
-			if(save) {
+			if(save && onlySave) {
+				Toolkit.getDefaultToolkit().beep();
+				frame.setCursor(null); // turn off the wait cursor
+				frame.dispose();
+				System.exit(0);
+			}else if(save){
 				Toolkit.getDefaultToolkit().beep();
 				frame.setCursor(null); // turn off the wait cursor
 				frame.dispose();
 				new SplashScreen(pass, file);
-			} else{
+			}else{
 				Toolkit.getDefaultToolkit().beep();
 				frame.setCursor(null); // turn off the wait cursor
 				frame.dispose();
@@ -174,6 +180,19 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		this.save = true;
 		this.pass = pass;
 		this.file = file;
+		initialize();
+		lblNone.setText("speichern...");
+		frame.setVisible(true);
+	}
+
+	public SplashScreen(String pass, File file, LinkedList<String> tr,
+			boolean b) {
+		this.toSave = tr;
+		//System.out.println(toSave.size());
+		this.save = true;
+		this.pass = pass;
+		this.file = file;
+		this.onlySave = b;
 		initialize();
 		lblNone.setText("speichern...");
 		frame.setVisible(true);
