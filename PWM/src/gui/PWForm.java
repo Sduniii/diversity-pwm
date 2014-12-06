@@ -46,8 +46,9 @@ public class PWForm {
 	private MyTableModel model;
 	private String pass;
 	private File file;
-	private JXButton btnSpeichern;
+	private JXButton btnSpeichern, btnNeu, btnLschen;
 	private JXTable table;
+	JScrollPane scrollPane;
 
 	// /**
 	// * Create the application.
@@ -97,16 +98,24 @@ public class PWForm {
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		frmPwm = new JXFrame();
+		frmPwm.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				scrollPane.setBounds(10, 11, e.getComponent().getWidth() - 36,
+						e.getComponent().getHeight() - 111);
+				scrollPane.repaint();
+				btnLschen.setBounds(160, e.getComponent().getHeight()-89, 71, 23);
+				btnLschen.repaint();
+				btnNeu.setBounds(99, e.getComponent().getHeight()-89, 51, 23);
+				btnNeu.repaint();
+				btnSpeichern.setBounds(10, e.getComponent().getHeight()-89, 79, 23);
+				btnSpeichern.repaint();
+			}
+		});
 		frmPwm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmPwm.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
 		frmPwm.setTitle("PWM");
-		frmPwm.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-
-			}
-		});
 		frmPwm.addWindowListener(new WindowListener() {
 
 			@Override
@@ -232,8 +241,7 @@ public class PWForm {
 						saveButtonClicked();
 					} else {
 						JOptionPane.showMessageDialog(frmPwm,
-								"Passwort zu klein",
-								"Passwort Fehler",
+								"Passwort zu klein", "Passwort Fehler",
 								JOptionPane.WARNING_MESSAGE);
 					}
 				}
@@ -278,7 +286,7 @@ public class PWForm {
 		btnSpeichern.setText("Speichern");
 		btnSpeichern.setEnabled(false);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 414, 217);
 		panel.add(scrollPane);
 		table = new JXTable();
@@ -302,7 +310,7 @@ public class PWForm {
 		table.setModel(model);
 		scrollPane.setViewportView(table);
 
-		JXButton btnNeu = new JXButton();
+		btnNeu = new JXButton();
 		btnNeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				model.addRow(new Object[] { "", "", "" });
@@ -314,7 +322,7 @@ public class PWForm {
 		btnNeu.setBounds(99, 239, 51, 23);
 		panel.add(btnNeu);
 
-		JXButton btnLschen = new JXButton();
+		btnLschen = new JXButton();
 		btnLschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRow() != -1)
