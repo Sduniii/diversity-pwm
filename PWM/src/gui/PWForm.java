@@ -29,7 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 
 import models.MyTableModel;
 
@@ -75,7 +74,7 @@ public class PWForm {
 			JOptionPane.showMessageDialog(frmPwm,
 					"gespeicherte Datei ist evtl. defekt!", "Fehler",
 					JOptionPane.ERROR_MESSAGE);
-		}
+		}	
 		model.addTableModelListener(new TableModelListener() {
 			@Override
 			public void tableChanged(TableModelEvent e) {

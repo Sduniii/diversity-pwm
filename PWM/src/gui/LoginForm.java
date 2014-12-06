@@ -43,6 +43,7 @@ public class LoginForm {
 	private JFileChooser fc = new JFileChooser();
 	File fileFC = null;
 	JPanel ttt;
+	JPasswordField ssss;
 	JCheckBox chckbxDateipfadMerken, chckbxPasswortSpeichern;
 	private final File optionFile = new File(System.getProperty("user.dir")+System.getProperty("file.separator")+"opt.ini");
 
@@ -55,6 +56,8 @@ public class LoginForm {
 				try {
 					LoginForm window = new LoginForm();
 					window.frame.setVisible(true);
+					window.ssss.requestFocus();
+					window.ssss.selectAll();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -126,7 +129,7 @@ public class LoginForm {
 		loginPane = new JXLoginPane();
 		loginPane.setBounds(10, 11, 414, 164);
 		loginPane.setPassword(sPa.toCharArray());
-		JPasswordField ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
+		ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
 				.getComponent(0)).getComponent(1)).getComponent(1)).getComponent(1);
 		ssss.addKeyListener
 	      (new KeyAdapter() {
