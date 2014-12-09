@@ -27,6 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -104,11 +106,13 @@ public class PWForm {
 				scrollPane.setBounds(10, 11, e.getComponent().getWidth() - 36,
 						e.getComponent().getHeight() - 111);
 				scrollPane.repaint();
-				btnLschen.setBounds(160, e.getComponent().getHeight()-89, 71, 23);
+				btnLschen.setBounds(160, e.getComponent().getHeight() - 89, 71,
+						23);
 				btnLschen.repaint();
-				btnNeu.setBounds(99, e.getComponent().getHeight()-89, 51, 23);
+				btnNeu.setBounds(99, e.getComponent().getHeight() - 89, 51, 23);
 				btnNeu.repaint();
-				btnSpeichern.setBounds(10, e.getComponent().getHeight()-89, 79, 23);
+				btnSpeichern.setBounds(10, e.getComponent().getHeight() - 89,
+						79, 23);
 				btnSpeichern.repaint();
 			}
 		});
@@ -329,7 +333,8 @@ public class PWForm {
 					if (JOptionPane.showConfirmDialog(frmPwm,
 							"Passwort l\u00F6schen?", "Löschen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
-						model.removeRow(table.getSelectedRow());
+						
+						model.removeRow(table.convertRowIndexToModel(table.getSelectedRow()));
 			}
 		});
 		btnLschen.setText("L\u00F6schen");
