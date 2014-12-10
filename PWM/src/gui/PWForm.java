@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,6 +33,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import models.MyTableModel;
@@ -41,9 +44,8 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXTable;
 
-import tools.FileOpener;
 import tools.HTMLParser;
-import exceptions.ImportFileNotFoundException;
+import tools.MyJFileChooser;
 
 public class PWForm {
 
@@ -226,10 +228,11 @@ public class PWForm {
 		mntmHtml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String[] s = { "htm", "html" };
-					String file = FileOpener.openFile(s, frmPwm);
-					if (file != null) {
-						LinkedList<String> list = HTMLParser.parse(file);
+					MyJFileChooser fc = new MyJFileChooser();
+					FileFilter filter = new FileNameExtensionFilter("HTML Dateien (*.html,*htm)", "htm", "html");
+					fc.setFileFilter(filter);
+					if (fc.showOpenDialog(frmPwm)==JFileChooser.APPROVE_OPTION) {
+						LinkedList<String> list = HTMLParser.parse(fc.getSelectedFile().getAbsolutePath());
 						Iterator<String> it = list.iterator();
 						while (it.hasNext()) {
 							model.addRow(new Object[] { it.next(), it.next(),
@@ -237,7 +240,7 @@ public class PWForm {
 						}
 						btnSpeichern.setEnabled(true);
 					}
-				} catch (ImportFileNotFoundException ex) {
+				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
 				}
 			}

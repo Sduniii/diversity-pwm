@@ -36,18 +36,20 @@ import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXLoginPane;
 
 import tools.AES;
+import tools.MyJFileChooser;
 import tools.SHA;
 import tools.SHA.TypeToGiveBack;
 
 public class LoginForm {
 	private JXFrame frame;
 	JXLoginPane loginPane;
-	private JFileChooser fc = new JFileChooser();
+	private MyJFileChooser fc = new MyJFileChooser();
 	File fileFC = null;
 	JPanel ttt;
 	JPasswordField ssss;
 	JCheckBox chckbxDateipfadMerken, chckbxPasswortSpeichern;
-	private final File optionFile = new File(System.getProperty("user.dir")+System.getProperty("file.separator")+"opt.ini");
+	private final File optionFile = new File(System.getProperty("user.dir")
+			+ System.getProperty("file.separator") + "opt.ini");
 
 	/**
 	 * Launch the application.
@@ -89,16 +91,16 @@ public class LoginForm {
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		String pfad = "...";
 		String sPa = "";
-		if(optionFile.exists()){
+		if (optionFile.exists()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(
 						optionFile));
 				String li = br.readLine();
-				while(li != null){
-					if(li.contains("F||")){
+				while (li != null) {
+					if (li.contains("F||")) {
 						pfad = li.replace("F||", "");
 						fileFC = new File(pfad);
-					}else if(li.contains("P||")){
+					} else if (li.contains("P||")) {
 						sPa = li.replace("P||", "");
 						sPa = AES.decode("d!dPzEdD#14bTS", sPa);
 					}
@@ -112,57 +114,52 @@ public class LoginForm {
 		frame.setResizable(false);
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
-		frame.setTitle("Anmelden");
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		frame.setTitle("Anmeldung");
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
-		frame.setBounds(screenWidth/2-220, screenHeight/2-133, 440, 266);
+		frame.setBounds(screenWidth / 2 - 220, screenHeight / 2 - 133, 440, 266);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
-		frame.addKeyListener
-	      (new KeyAdapter() {
-	          public void keyPressed(KeyEvent e) {
-	            int key = e.getKeyCode();
-	            if (key == KeyEvent.VK_ENTER) {
-	               createActions();
-	               }
-	            }
-	          }
-	       );
-		
+		frame.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				if (key == KeyEvent.VK_ENTER) {
+					createActions();
+				}
+			}
+		});
 
 		loginPane = new JXLoginPane();
 		loginPane.setBounds(10, 11, 414, 164);
 		loginPane.setPassword(sPa.toCharArray());
-		ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
-				.getComponent(0)).getComponent(1)).getComponent(1)).getComponent(1);
-		ssss.addKeyListener
-	      (new KeyAdapter() {
-	          public void keyPressed(KeyEvent e) {
-	            int key = e.getKeyCode();
-	            if (key == KeyEvent.VK_ENTER) {
-	               createActions();
-	               }
-	            }
-	          }
-	       );
+		ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane
+				.getComponent(1)).getComponent(0)).getComponent(1))
+				.getComponent(1)).getComponent(1);
+		ssss.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				if (key == KeyEvent.VK_ENTER) {
+					createActions();
+				}
+			}
+		});
 		ttt = (JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
 				.getComponent(0)).getComponent(1)).getComponent(1);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("*.ts",
-				"ts");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"diversITy Dateien (*.dit)", "dit");
 		fc.setFileFilter(filter);
 		fc.setDialogTitle("Passwort Datei auswählen");
 		JXButton btnFC = new JXButton();
-		btnFC.addKeyListener
-	      (new KeyAdapter() {
-	          public void keyPressed(KeyEvent e) {
-	            int key = e.getKeyCode();
-	            if (key == KeyEvent.VK_ENTER) {
-	            	createActions();
-	               }
-	            }
-	          }
-	       );
+		btnFC.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				int key = e.getKeyCode();
+				if (key == KeyEvent.VK_ENTER) {
+					createActions();
+				}
+			}
+		});
 		btnFC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int returnVal;
@@ -174,8 +171,19 @@ public class LoginForm {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					fileFC = fc.getSelectedFile();
-					((JXButton) ttt.getComponent(0)).setText(fileFC
-							.getAbsolutePath());
+					if (!fileFC.getName().endsWith(".dit")
+							&& !fc.getFileFilter().accept(fileFC)) {
+						if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
+							fileFC = new File(fileFC.getAbsolutePath() + ".dit");
+						}
+					}
+					if (!fileFC.exists()
+							&& fc.getDialogType() == JFileChooser.OPEN_DIALOG) {
+						fileFC = null;
+					} else {
+						((JXButton) ttt.getComponent(0)).setText(fileFC
+								.getAbsolutePath());
+					}
 					// This is where a real application would open the file.
 				}
 			}
@@ -206,7 +214,7 @@ public class LoginForm {
 					fc.setDialogType(JFileChooser.SAVE_DIALOG);
 					fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
 					fc.setDialogTitle("Datei erstellen...");
-					hprlnkNeuerBenutzer.setText("Login");
+					hprlnkNeuerBenutzer.setText("Laden");
 					btnOk.setText("Erstellen");
 				} else {
 					loginPane.setBannerText("Anmeldung");
@@ -223,26 +231,19 @@ public class LoginForm {
 		hprlnkNeuerBenutzer.setText("Neue Datei");
 		hprlnkNeuerBenutzer.setBounds(268, 210, 76, 19);
 		frame.getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
-		
+
 		chckbxPasswortSpeichern = new JCheckBox("Passwort merken?");
 		chckbxPasswortSpeichern.setBounds(10, 208, 123, 23);
-		if(sPa != "") chckbxPasswortSpeichern.setSelected(true);
+		if (sPa != "")
+			chckbxPasswortSpeichern.setSelected(true);
 		frame.getRootPaneExt().getContentPane().add(chckbxPasswortSpeichern);
-		
+
 		chckbxDateipfadMerken = new JCheckBox("Dateipfad merken?");
 		chckbxDateipfadMerken.setSelected(true);
 		chckbxDateipfadMerken.setBounds(10, 182, 123, 23);
 		frame.getRootPaneExt().getContentPane().add(chckbxDateipfadMerken);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
 	@SuppressWarnings("resource")
 	private void createActions() {
 		try {
@@ -254,43 +255,53 @@ public class LoginForm {
 						BufferedReader fr = new BufferedReader(new FileReader(
 								fileFC));
 						String pa = fr.readLine();
+						pa = fr.readLine();
 						String sss = (String) SHA.getHash(
 								new String(loginPane.getPassword()), "Sha-512",
 								TypeToGiveBack.HEXSTRING);
 						sss = (String) SHA.getHash(sss, "Sha-512",
 								TypeToGiveBack.HEXSTRING);
-						if (new String(Base64.getUrlDecoder().decode(pa))
+						if (new String(pa)
 								.equals(sss)) {
-							if(chckbxDateipfadMerken.isSelected()&& !chckbxPasswortSpeichern.isSelected()){
-								try{
+							if (chckbxDateipfadMerken.isSelected()
+									&& !chckbxPasswortSpeichern.isSelected()) {
+								try {
 									BufferedWriter bw = new BufferedWriter(
 											new FileWriter(optionFile));
-									bw.write("F||"+fileFC.getAbsolutePath());
+									bw.write("F||" + fileFC.getAbsolutePath());
 									bw.close();
-								}catch(Exception ex){
-									
+								} catch (Exception ex) {
+
 								}
-							}else if(chckbxPasswortSpeichern.isSelected() && !chckbxDateipfadMerken.isSelected()) {
-								try{
+							} else if (chckbxPasswortSpeichern.isSelected()
+									&& !chckbxDateipfadMerken.isSelected()) {
+								try {
 									BufferedWriter bw = new BufferedWriter(
 											new FileWriter(optionFile));
-									bw.write("P||"+new String(loginPane.getPassword()));
+									bw.write("P||"
+											+ new String(loginPane
+													.getPassword()));
 									bw.close();
-								}catch(Exception ex){
-									
+								} catch (Exception ex) {
+
 								}
-							}else if(chckbxDateipfadMerken.isSelected() && chckbxPasswortSpeichern.isSelected()){
-								try{
+							} else if (chckbxDateipfadMerken.isSelected()
+									&& chckbxPasswortSpeichern.isSelected()) {
+								try {
 									BufferedWriter bw = new BufferedWriter(
 											new FileWriter(optionFile));
-									bw.write("F||"+fileFC.getAbsolutePath());
+									bw.write("F||" + fileFC.getAbsolutePath());
 									bw.newLine();
-									bw.write("P||"+AES.encode("d!dPzEdD#14bTS", new String(loginPane.getPassword())));
+									bw.write("P||"
+											+ AES.encode(
+													"d!dPzEdD#14bTS",
+													new String(loginPane
+															.getPassword())));
 									bw.close();
-								}catch(Exception ex){
-									
+								} catch (Exception ex) {
+
 								}
-							}else{
+							} else {
 								optionFile.delete();
 							}
 							frame.dispose();
@@ -335,6 +346,10 @@ public class LoginForm {
 							JOptionPane.showMessageDialog(frame,
 									"Datei erstellt!", "OK",
 									JOptionPane.INFORMATION_MESSAGE);
+						}else{
+							JOptionPane.showMessageDialog(frame,
+									"Passwort zu klein!", "Fehler",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
 						if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
