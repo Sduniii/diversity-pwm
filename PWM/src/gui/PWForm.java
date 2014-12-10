@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -309,7 +307,8 @@ public class PWForm {
 		btnSpeichern.setEnabled(false);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, frmPwm.getHeight()-36, frmPwm.getWidth()-111);
+		scrollPane.setBounds(10, 11, frmPwm.getHeight() - 36,
+				frmPwm.getWidth() - 111);
 		panel.add(scrollPane);
 		table = new JXTable();
 		table.addMouseListener(new MouseAdapter() {
@@ -363,23 +362,31 @@ public class PWForm {
 		panel.add(btnLschen);
 
 		chckbxPasswrterAnzeigen = new JCheckBox("Passw\u00F6rter anzeigen?");
-		chckbxPasswrterAnzeigen.addItemListener(new ItemListener() {
-			
+
+		chckbxPasswrterAnzeigen.addActionListener(new ActionListener() {
+
 			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					table.setDefaultRenderer(Object.class,
-							new DefaultTableCellRenderer());
-					scrollPane.repaint();
+			public void actionPerformed(ActionEvent e) {
+				if (chckbxPasswrterAnzeigen.isSelected()) {
+					String s = (String) JOptionPane.showInputDialog(frmPwm,
+							"Passwort", "Passwort eingeben!",
+							JOptionPane.WARNING_MESSAGE, null, null, "");
+					if (s != null && (s).equals(pass)) {
+						table.setDefaultRenderer(Object.class,
+								new DefaultTableCellRenderer());
+						scrollPane.repaint();
+					}else{
+						chckbxPasswrterAnzeigen.setSelected(false);
+					}
 				} else {
 					table.setDefaultRenderer(Object.class,
 							new PasswordCellRenderer());
 					scrollPane.repaint();
 				}
-				
 			}
 		});
-		chckbxPasswrterAnzeigen.setBounds(237, frmPwm.getHeight() - 89, 131, 23);
+		chckbxPasswrterAnzeigen
+				.setBounds(237, frmPwm.getHeight() - 89, 131, 23);
 		panel.add(chckbxPasswrterAnzeigen);
 	}
 
