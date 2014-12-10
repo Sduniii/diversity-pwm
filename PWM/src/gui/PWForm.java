@@ -37,6 +37,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import models.MyJPasswordPane;
 import models.MyTableModel;
 import models.PasswordCellRenderer;
 
@@ -56,7 +57,8 @@ public class PWForm {
 	private JXButton btnSpeichern, btnNeu, btnLschen;
 	private JXTable table;
 	private JScrollPane scrollPane;
-	private JCheckBox chckbxPasswrterAnzeigen;
+	private JCheckBox chckbxPasswrterAnzeigen, chckbxStopEdit;
+	MouseAdapter tableMouseListener;
 
 	// /**
 	// * Create the application.
@@ -122,6 +124,10 @@ public class PWForm {
 				btnSpeichern.repaint();
 				chckbxPasswrterAnzeigen.setBounds(237, e.getComponent()
 						.getHeight() - 89, 131, 23);
+				chckbxPasswrterAnzeigen.repaint();
+				chckbxStopEdit.setBounds(370, e.getComponent()
+						.getHeight() - 89, 131, 23);
+				chckbxStopEdit.repaint();
 			}
 		});
 		frmPwm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -337,7 +343,7 @@ public class PWForm {
 				frmPwm.getWidth() - 111);
 		panel.add(scrollPane);
 		table = new JXTable();
-		table.addMouseListener(new MouseAdapter() {
+		tableMouseListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 3) {
@@ -349,7 +355,8 @@ public class PWForm {
 					pMenu.show(table, e.getX(), e.getY());
 				}
 			}
-		});
+		};
+		table.addMouseListener(tableMouseListener);
 		table.putClientProperty("terminateEditOnFocusLost", true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
@@ -394,10 +401,10 @@ public class PWForm {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (chckbxPasswrterAnzeigen.isSelected()) {
-					String s = (String) JOptionPane.showInputDialog(frmPwm,
-							"Passwort", "Passwort eingeben!",
-							JOptionPane.WARNING_MESSAGE, null, null, "");
-					if (s != null && (s).equals(pass)) {
+					MyJPasswordPane pane = new MyJPasswordPane();
+					pane.createDialog(frmPwm, "Passwort:").setVisible(true);
+					String ss = pane.getPassword();
+					if ((ss).equals(pass)) {
 						table.setDefaultRenderer(Object.class,
 								new DefaultTableCellRenderer());
 						scrollPane.repaint();
@@ -414,6 +421,34 @@ public class PWForm {
 		chckbxPasswrterAnzeigen
 				.setBounds(237, frmPwm.getHeight() - 89, 131, 23);
 		panel.add(chckbxPasswrterAnzeigen);
+		
+		chckbxStopEdit = new JCheckBox("Editieren sperren!");
+
+		chckbxStopEdit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!chckbxStopEdit.isSelected()) {
+					MyJPasswordPane pane = new MyJPasswordPane();
+					pane.createDialog(frmPwm, "Passwort:").setVisible(true);
+					String ss = pane.getPassword();
+					if ((ss).equals(pass)) {
+						table.setEditable(true);
+						table.addMouseListener(tableMouseListener);
+						scrollPane.repaint();
+					}else{
+						chckbxStopEdit.setSelected(true);
+					}
+				} else {
+					table.setEditable(false);
+					table.removeMouseListener(tableMouseListener);
+					scrollPane.repaint();
+				}
+			}
+		});
+		chckbxStopEdit
+				.setBounds(370, frmPwm.getHeight() - 89, 131, 23);
+		panel.add(chckbxStopEdit);
 	}
 
 	protected void saveButtonClicked() {
