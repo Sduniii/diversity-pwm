@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -18,6 +20,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import models.MyTableModel;
 import models.PasswordCellRenderer;
@@ -51,7 +55,8 @@ public class PWForm {
 	private File file;
 	private JXButton btnSpeichern, btnNeu, btnLschen;
 	private JXTable table;
-	JScrollPane scrollPane;
+	private JScrollPane scrollPane;
+	private JCheckBox chckbxPasswrterAnzeigen;
 
 	// /**
 	// * Create the application.
@@ -115,6 +120,8 @@ public class PWForm {
 				btnSpeichern.setBounds(10, e.getComponent().getHeight() - 89,
 						79, 23);
 				btnSpeichern.repaint();
+				chckbxPasswrterAnzeigen.setBounds(237, e.getComponent()
+						.getHeight() - 89, 131, 23);
 			}
 		});
 		frmPwm.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -148,8 +155,8 @@ public class PWForm {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (table.isEditing()){
-				    table.getCellEditor().stopCellEditing();
+				if (table.isEditing()) {
+					table.getCellEditor().stopCellEditing();
 				}
 				if (btnSpeichern.isEnabled()) {
 					if (JOptionPane.showConfirmDialog(frmPwm,
@@ -179,12 +186,14 @@ public class PWForm {
 
 			}
 		});
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
-		int progWidth = screenWidth/2;
-		int progHeight = screenHeight/2;
-		frmPwm.setBounds(progWidth-(progWidth/2), progHeight-(progHeight/2), progWidth, progHeight);
+		int progWidth = screenWidth / 2;
+		int progHeight = screenHeight / 2;
+		frmPwm.setBounds(progWidth - (progWidth / 2), progHeight
+				- (progHeight / 2), progWidth, progHeight);
 
 		JMenuBar menuBar = new JMenuBar();
 		frmPwm.setJMenuBar(menuBar);
@@ -294,13 +303,13 @@ public class PWForm {
 				saveButtonClicked();
 			}
 		});
-		btnSpeichern.setBounds(10, 239, 79, 23);
+		btnSpeichern.setBounds(10, frmPwm.getHeight() - 89, 79, 23);
 		panel.add(btnSpeichern);
 		btnSpeichern.setText("Speichern");
 		btnSpeichern.setEnabled(false);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 414, 217);
+		scrollPane.setBounds(10, 11, frmPwm.getHeight()-36, frmPwm.getWidth()-111);
 		panel.add(scrollPane);
 		table = new JXTable();
 		table.addMouseListener(new MouseAdapter() {
@@ -321,7 +330,7 @@ public class PWForm {
 		table.setCellSelectionEnabled(true);
 		model = new MyTableModel(new Object[][] {}, new String[] { "Location",
 				"User", "Password" });
-		table.setModel(model);	
+		table.setModel(model);
 		table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
 		scrollPane.setViewportView(table);
 
@@ -334,7 +343,7 @@ public class PWForm {
 			}
 		});
 		btnNeu.setText("Neu");
-		btnNeu.setBounds(99, 239, 51, 23);
+		btnNeu.setBounds(99, frmPwm.getHeight() - 89, 51, 23);
 		panel.add(btnNeu);
 
 		btnLschen = new JXButton();
@@ -350,8 +359,28 @@ public class PWForm {
 			}
 		});
 		btnLschen.setText("L\u00F6schen");
-		btnLschen.setBounds(160, 239, 71, 23);
+		btnLschen.setBounds(160, frmPwm.getHeight() - 89, 71, 23);
 		panel.add(btnLschen);
+
+		chckbxPasswrterAnzeigen = new JCheckBox("Passw\u00F6rter anzeigen?");
+		chckbxPasswrterAnzeigen.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					table.setDefaultRenderer(Object.class,
+							new DefaultTableCellRenderer());
+					scrollPane.repaint();
+				} else {
+					table.setDefaultRenderer(Object.class,
+							new PasswordCellRenderer());
+					scrollPane.repaint();
+				}
+				
+			}
+		});
+		chckbxPasswrterAnzeigen.setBounds(237, frmPwm.getHeight() - 89, 131, 23);
+		panel.add(chckbxPasswrterAnzeigen);
 	}
 
 	protected void saveButtonClicked() {
