@@ -36,6 +36,7 @@ import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXLoginPane;
 
 import tools.AES;
+import tools.CreateFile;
 import tools.MyJFileChooser;
 import tools.SHA;
 import tools.SHA.TypeToGiveBack;
@@ -330,18 +331,12 @@ public class LoginForm {
 					if (fileFC != null) {
 						if (loginPane.getPassword().length >= 6) {
 
-							fileFC.createNewFile();
-							BufferedWriter fw = new BufferedWriter(
-									new FileWriter(fileFC));
 							String sss = (String) SHA.getHash(new String(
 									loginPane.getPassword()), "Sha-512",
 									TypeToGiveBack.HEXSTRING);
 							sss = (String) SHA.getHash(sss, "Sha-512",
 									TypeToGiveBack.HEXSTRING);
-							fw.write(new String(Base64.getUrlEncoder()
-									.encodeToString(sss.getBytes())));
-							fw.newLine();
-							fw.close();
+							CreateFile.startCreate(fileFC.getAbsolutePath() + "tmp", fileFC.getAbsolutePath(), sss);
 							JOptionPane.showMessageDialog(frame,
 									"Datei erstellt!", "OK",
 									JOptionPane.INFORMATION_MESSAGE);
@@ -357,18 +352,12 @@ public class LoginForm {
 									.getAbsolutePath());
 							if (loginPane.getPassword().length >= 6) {
 
-								fileFC.createNewFile();
-								BufferedWriter fw = new BufferedWriter(
-										new FileWriter(fileFC));
 								String sss = (String) SHA.getHash(new String(
 										loginPane.getPassword()), "Sha-512",
 										TypeToGiveBack.HEXSTRING);
 								sss = (String) SHA.getHash(sss, "Sha-512",
 										TypeToGiveBack.HEXSTRING);
-								fw.write(new String(Base64.getUrlEncoder()
-										.encodeToString(sss.getBytes())));
-								fw.newLine();
-								fw.close();
+								CreateFile.startCreate(fileFC.getAbsolutePath() + "tmp", fileFC.getAbsolutePath(), sss);
 								JOptionPane.showMessageDialog(frame,
 										"Datei erstellt!", "OK",
 										JOptionPane.INFORMATION_MESSAGE);
