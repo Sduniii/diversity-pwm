@@ -27,12 +27,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import models.MyTableModel;
+import models.PasswordCellRenderer;
 
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
@@ -311,7 +310,8 @@ public class PWForm {
 		table.setCellSelectionEnabled(true);
 		model = new MyTableModel(new Object[][] {}, new String[] { "Location",
 				"User", "Password" });
-		table.setModel(model);
+		table.setModel(model);	
+		table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
 		scrollPane.setViewportView(table);
 
 		btnNeu = new JXButton();
@@ -333,8 +333,9 @@ public class PWForm {
 					if (JOptionPane.showConfirmDialog(frmPwm,
 							"Passwort l\u00F6schen?", "Löschen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
-						
-						model.removeRow(table.convertRowIndexToModel(table.getSelectedRow()));
+
+						model.removeRow(table.convertRowIndexToModel(table
+								.getSelectedRow()));
 			}
 		});
 		btnLschen.setText("L\u00F6schen");
