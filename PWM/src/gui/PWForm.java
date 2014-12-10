@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -146,6 +148,9 @@ public class PWForm {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
+				if (table.isEditing()){
+				    table.getCellEditor().stopCellEditing();
+				}
 				if (btnSpeichern.isEnabled()) {
 					if (JOptionPane.showConfirmDialog(frmPwm,
 							"Änderung speichern?", "Speichern",
@@ -174,7 +179,12 @@ public class PWForm {
 
 			}
 		});
-		frmPwm.setBounds(100, 100, 450, 328);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int screenWidth = gd.getDisplayMode().getWidth();
+		int screenHeight = gd.getDisplayMode().getHeight();
+		int progWidth = screenWidth/2;
+		int progHeight = screenHeight/2;
+		frmPwm.setBounds(progWidth-(progWidth/2), progHeight-(progHeight/2), progWidth, progHeight);
 
 		JMenuBar menuBar = new JMenuBar();
 		frmPwm.setJMenuBar(menuBar);
@@ -306,6 +316,7 @@ public class PWForm {
 				}
 			}
 		});
+		table.putClientProperty("terminateEditOnFocusLost", true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setCellSelectionEnabled(true);
 		model = new MyTableModel(new Object[][] {}, new String[] { "Location",

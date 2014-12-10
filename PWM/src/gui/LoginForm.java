@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -111,7 +113,10 @@ public class LoginForm {
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
 		frame.setTitle("Anmelden");
-		frame.setBounds(100, 100, 440, 266);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int screenWidth = gd.getDisplayMode().getWidth();
+		int screenHeight = gd.getDisplayMode().getHeight();
+		frame.setBounds(screenWidth/2-220, screenHeight/2-133, 440, 266);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
 		frame.addKeyListener

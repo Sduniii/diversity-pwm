@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Cursor;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -214,7 +216,10 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		frame = new JXFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
 		frame.setTitle("");
-		frame.setBounds(100, 100, 450, 300);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int screenWidth = gd.getDisplayMode().getWidth();
+		int screenHeight = gd.getDisplayMode().getHeight();
+		frame.setBounds(screenWidth/2-225, screenHeight/2-150, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setUndecorated(true);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
