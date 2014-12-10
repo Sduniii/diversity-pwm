@@ -220,6 +220,29 @@ public class PWForm {
 				}
 			}
 		});
+		
+		JMenuItem mntmSpeichernUnter = new JMenuItem("Speichern unter");
+		mntmSpeichernUnter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MyJFileChooser fc = new MyJFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+						"diversITy Dateien (*.dit)", "dit");
+				fc.setFileFilter(filter);
+				fc.setDialogTitle("Speichern unter");
+				int returnVal = fc.showSaveDialog(frmPwm);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					file = fc.getSelectedFile();
+					if (!file.getName().endsWith(".dit")
+							&& !fc.getFileFilter().accept(file)) {
+						if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
+							file = new File(file.getAbsolutePath() + ".dit");
+						}
+					}
+					saveButtonClicked();
+				}
+			}
+		});
+		mnDatei.add(mntmSpeichernUnter);
 
 		JMenu mnImport = new JMenu("Import");
 		mnDatei.add(mnImport);

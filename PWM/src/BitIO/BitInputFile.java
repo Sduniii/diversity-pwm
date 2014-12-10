@@ -48,7 +48,7 @@ public class BitInputFile
    */   
   public BitInputFile(String filename) throws IOException
   {
-    file = new DataInputStream(new BufferedInputStream(new FileInputStream(filename)));
+    setFile(new DataInputStream(new BufferedInputStream(new FileInputStream(filename))));
     bitMode = false;
     buffer = new byte[bufferSize];
     unreadBitsInBuffer = 0;
@@ -67,8 +67,8 @@ public class BitInputFile
   {
     if(bitMode)
       endBitMode();
-    file.close();
-    file = null;
+    getFile().close();
+    setFile(null);
   }
 
 
@@ -88,7 +88,7 @@ public class BitInputFile
     if(bitMode)
       throw new IOException("Bit mode already turned on.");
     
-    totalUnreadBits = file.readInt();
+    totalUnreadBits = getFile().readInt();
     unreadBitsInBuffer = 0;
     bitMode = true;
     
@@ -119,7 +119,7 @@ public class BitInputFile
    * @return the number of bytes that can be read. 
    * @throws IOException if an I/O error occurs. 
    */
-  public int available() throws IOException { return file.available(); }
+  public int available() throws IOException { return getFile().available(); }
 
   /**
    * Give the number of bits remaining to be read in this bit mode.
@@ -172,7 +172,7 @@ public class BitInputFile
 	   bytesToReadNow = buffer.length;
 	 }
 
-       file.readFully(buffer, 0, bytesToReadNow);
+       getFile().readFully(buffer, 0, bytesToReadNow);
        nextBitInBuffer = 0;
      }
 
@@ -196,7 +196,7 @@ public class BitInputFile
   {
     if(bitMode)
       throw new IOException("Cannot read ints in bit mode!");
-    return file.readInt();
+    return getFile().readInt();
   }
 
 
@@ -211,7 +211,7 @@ public class BitInputFile
   {
     if(bitMode)
       throw new IOException("Cannot read bytes in bit mode!");
-    return file.readUnsignedByte();
+    return getFile().readUnsignedByte();
   }
 
 
@@ -225,7 +225,7 @@ public class BitInputFile
   {
     if(bitMode)
       throw new IOException("Cannot read bytes in bit mode!");
-    return file.readLong();
+    return getFile().readLong();
   }
 
 
@@ -241,7 +241,7 @@ public class BitInputFile
   {
     if(bitMode)
       throw new IOException("Cannot read bytes in bit mode!");
-    return file.readBoolean();
+    return getFile().readBoolean();
   }
 
 
@@ -252,9 +252,9 @@ public class BitInputFile
    */
   public void finalize() throws IOException
   {
-    if(file != null)
-      file.close();
-    file = null;
+    if(getFile() != null)
+      getFile().close();
+    setFile(null);
   }  
 
 
@@ -316,4 +316,20 @@ public class BitInputFile
 	return;
       }
   }
+
+
+/**
+ * @return the file
+ */
+public DataInputStream getFile() {
+	return file;
+}
+
+
+/**
+ * @param file the file to set
+ */
+public void setFile(DataInputStream file) {
+	this.file = file;
+}
 }

@@ -69,69 +69,79 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				if (!save) {
 					boolean withCompress = true;
 					File tempFile;
-					if(withCompress){
+					if (withCompress) {
 						tempFile = new File(file.getAbsolutePath() + "tmp");
-						decompressFile(file.getAbsolutePath(), file.getAbsolutePath() + "tmp");
-					}else{
+						decompressFile(file.getAbsolutePath(),
+								file.getAbsolutePath() + "tmp");
+					} else {
 						tempFile = file;
 					}
 					long progress = 0;
 					setProgress(0);
 					lblNone.setText("lese...");
-					long fullProgress = tempFile.length()-1;
-					BufferedReader br = new BufferedReader(new FileReader(tempFile));
-					//System.out.println(br.readLine());
+					long fullProgress = tempFile.length() - 1;
+					BufferedReader br = new BufferedReader(new FileReader(
+							tempFile));
+					// System.out.println(br.readLine());
 					fullProgress -= br.readLine().length();
 					progress++;
 					setProgress(Math.min((int) (progress * 100 / fullProgress),
 							100));
-					lblNone.setText("lese... " + Integer.toString(getProgress())+ "%");
+					lblNone.setText("lese... "
+							+ Integer.toString(getProgress()) + "%");
 					int ch;
 					String temp = "";
 					while ((ch = br.read()) != -1) {
-						//if(temp == "") System.out.println((char)ch);
-						temp += (char)ch;
+						// if(temp == "") System.out.println((char)ch);
+						temp += (char) ch;
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 99));
-						lblNone.setText("lese... " + Integer.toString(getProgress()) + "%");
-						//if(progress == fullProgress) System.out.println((char)ch);
+						lblNone.setText("lese... "
+								+ Integer.toString(getProgress()) + "%");
+						// if(progress == fullProgress)
+						// System.out.println((char)ch);
 					}
 					br.close();
-					//System.out.println(temp);
+					// System.out.println(temp);
 					lblNone.setText("entschlüssele...");
 					progress = 0;
-					fullProgress = temp.length()-1;
+					fullProgress = temp.length() - 1;
 					setProgress(0);
 					temp = AES.decode(pass, temp);
-					//System.out.println(temp);
+					// System.out.println(temp);
 					String temp2 = "";
-					for(int i = 0; i< temp.length(); i++){
-						if(temp.charAt(i) == '|'){
+					for (int i = 0; i < temp.length(); i++) {
+						if (temp.charAt(i) == '|') {
 							allDecrypt.add(AES.decode(pass, temp2));
 							temp2 = "";
-						}else{
+						} else {
 							temp2 += temp.charAt(i);
 						}
-						if(i == temp.length()-1)allDecrypt.add(AES.decode(pass, temp2));
+						if (i == temp.length() - 1)
+							allDecrypt.add(AES.decode(pass, temp2));
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 100));
-						lblNone.setText("entschlüssele... " + Integer.toString(getProgress())+ "%");
+						lblNone.setText("entschlüssele... "
+								+ Integer.toString(getProgress()) + "%");
 					}
-					if(withCompress)
+					if (withCompress)
 						tempFile.delete();
-					//System.out.println(allDecrypt.size());
-				} else{
+					// System.out.println(allDecrypt.size());
+				} else {
 					int progress = 0;
 					setProgress(0);
-					File tempFile = new File(file.getAbsolutePath()+"tmp");
+					File tempFile = new File(file.getAbsolutePath() + "tmp");
 					int fullProgress = toSave.size();
-					BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile,
-							false));
-					String sss = (String)SHA.getHash(pass, "Sha-512", TypeToGiveBack.HEXSTRING);
-					sss = (String)SHA.getHash(sss, "Sha-512", TypeToGiveBack.HEXSTRING);
-					bw.write(new String(Base64.getUrlEncoder().encode(sss.getBytes())));
+					BufferedWriter bw = new BufferedWriter(new FileWriter(
+							tempFile, false));
+					String sss = (String) SHA.getHash(pass, "Sha-512",
+							TypeToGiveBack.HEXSTRING);
+					sss = (String) SHA.getHash(sss, "Sha-512",
+							TypeToGiveBack.HEXSTRING);
+					bw.write(new String(Base64.getUrlEncoder().encode(
+							sss.getBytes())));
 					bw.newLine();
 					Iterator<String> it = toSave.iterator();
 					String temp = "";
@@ -140,19 +150,25 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 100));
-						lblNone.setText("speichere... " + Integer.toString(getProgress())+ "%");
+						lblNone.setText("speichere... "
+								+ Integer.toString(getProgress()) + "%");
 						String t = it.next();
-						if(it.hasNext()) temp += AES.encode(pass, t) + "|";
-						else temp += AES.encode(pass, t);
+						if (it.hasNext())
+							temp += AES.encode(pass, t) + "|";
+						else
+							temp += AES.encode(pass, t);
 					}
-					//System.out.println(temp.split("\\|").length);
+					// System.out.println(temp.split("\\|").length);
 					progress++;
 					bw.write(AES.encode(pass, temp));
 					bw.close();
-					setProgress(Math.min(
-							(int) (progress * 100 / fullProgress), 100));
-					lblNone.setText("speichere... " + Integer.toString(getProgress())+ "%");
-					startCompress(tempFile.getAbsolutePath(), file.getAbsolutePath(), sss);
+					setProgress(Math.min((int) (progress * 100 / fullProgress),
+							100));
+					lblNone.setText("speichere... "
+							+ Integer.toString(getProgress()) + "%");
+					startCompress(tempFile.getAbsolutePath(),
+							file.getAbsolutePath(), new String(Base64
+									.getUrlEncoder().encode(sss.getBytes())));
 					tempFile.delete();
 				}
 				return null;
@@ -166,59 +182,59 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		 */
 		@Override
 		public void done() {
-			if(save && onlySave) {
+			if (save && onlySave) {
 				Toolkit.getDefaultToolkit().beep();
 				frame.setCursor(null); // turn off the wait cursor
 				frame.dispose();
 				System.exit(0);
-			}else if(save){
+			} else if (save) {
 				Toolkit.getDefaultToolkit().beep();
 				frame.setCursor(null); // turn off the wait cursor
 				frame.dispose();
 				new SplashScreen(pass, file);
-			}else{
+			} else {
 				Toolkit.getDefaultToolkit().beep();
 				frame.setCursor(null); // turn off the wait cursor
 				frame.dispose();
-				new PWForm(allDecrypt,pass,file);
+				new PWForm(allDecrypt, pass, file);
 			}
 		}
-		
+
 		private BufferedInputStream bis;
 		private BitOutputFile bof;
 		private HuffmanTree huffmanTree;
-		
 
-		public void startCompress(String input, String output, String sss){
-			if(input.isEmpty() || output.isEmpty()){
-		
-			}else{
+		public void startCompress(String input, String output, String sss) {
+			if (input.isEmpty() || output.isEmpty()) {
+
+			} else {
 				ArrayList<HuffmanToken> dict = createDictionary(input);
 				HuffmanTree comTree = createHuffmanTree(dict);
 				compressFile(input, output, comTree, sss);
 			}
-			
+
 		}
-		
+
 		/**
 		 * Read the File and create the dictionary containing the huffman token
 		 * 
 		 * @param sourceFile
 		 *            is the input file
 		 */
-		private ArrayList<HuffmanToken> createDictionary(
-				String sourceFile) {
+		private ArrayList<HuffmanToken> createDictionary(String sourceFile) {
 			lblNone.setText("komprimiere: erstelle Bibliothek...");
 			ArrayList<HuffmanToken> dictionary = new ArrayList<HuffmanToken>();
 			int progress = 0;
 			try {
 				bis = new BufferedInputStream(new FileInputStream(sourceFile));
 				int fullProgress = (int) (new File(sourceFile)).length();
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("komprimiere: erstelle Bibliothek... " + Integer.toString(getProgress())+ "%");
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("komprimiere: erstelle Bibliothek... "
+						+ Integer.toString(getProgress()) + "%");
 				int byteRead = bis.read();
-				while (byteRead > -1 && byteRead < 256) { // bytes aus Datei lesen
+				while (byteRead > -1 && byteRead < 256) { // bytes aus Datei
+															// lesen
 					// solange Datei
 					// vorhanden und kein
 					// Byte Groesser als 255
@@ -228,7 +244,8 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					if (dictionary.isEmpty()) {
 						dictionary.add(new HuffmanToken(byteRead, 1));
 					} else {
-						// Vergleichen ob es das Byte schon gibt und die Haeufigkeit
+						// Vergleichen ob es das Byte schon gibt und die
+						// Haeufigkeit
 						// um 1 erhoeht werden muss, ansonsten ein neuer Huffman
 						// Token
 						boolean found = false;
@@ -244,9 +261,10 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						}
 					}
 					progress++;
-					setProgress(Math.min(
-							(int) (progress * 100 / fullProgress), 100));
-					lblNone.setText("komprimiere: erstelle Bibliothek... " + Integer.toString(getProgress())+ "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress),
+							100));
+					lblNone.setText("komprimiere: erstelle Bibliothek... "
+							+ Integer.toString(getProgress()) + "%");
 					byteRead = bis.read();
 				}
 				bis.close();
@@ -264,58 +282,60 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		 *            is the dictionary with the huffman token
 		 * @return returns a Huffmantree
 		 */
-		private HuffmanTree createHuffmanTree(
-				ArrayList<HuffmanToken> dictionary) {
+		private HuffmanTree createHuffmanTree(ArrayList<HuffmanToken> dictionary) {
 
 			/** Progress **/
 			lblNone.setText("komprimiere: erstelle Baum...");
 			int progress = 0;
 			/** Progress END **/
-			
+
 			int heapSize = 0;
 			// einen Heap erstellen der HuffmanTrees beinhaltet
-			Heap<HuffmanTree> huffmanHeap = new Heap<HuffmanTree>(new HuffmanTree(
-					dictionary.get(0)));
+			Heap<HuffmanTree> huffmanHeap = new Heap<HuffmanTree>(
+					new HuffmanTree(dictionary.get(0)));
 			heapSize++;
-			
+
 			/** Progress **/
 			progress++;
 			int fullProgress = dictionary.size() * 2;
-			setProgress(Math.min(
-					(int) (progress * 100 / fullProgress), 100));
-			lblNone.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress())+ "%");
+			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+			lblNone.setText("komprimiere: erstelle Baum..."
+					+ Integer.toString(getProgress()) + "%");
 			/** Progress END **/
-			
-			
-			if (dictionary.size() == 1) { // der Sonderfall, dass eine Datei nur aus
+
+			if (dictionary.size() == 1) { // der Sonderfall, dass eine Datei nur
+											// aus
 				// der Wiederholung eines und desselben
 				// Bytes besteht
-				huffmanTree = huffmanHeap.extractMin(); // dann ist der Huffmanbaum
+				huffmanTree = huffmanHeap.extractMin(); // dann ist der
+														// Huffmanbaum
 				// der Wurzelknoten des
 				// Heaps
 				return huffmanTree;
 			}
 
-			for (int i = 1; i < dictionary.size(); i++) { // alle HuffmanToken aus
+			for (int i = 1; i < dictionary.size(); i++) { // alle HuffmanToken
+															// aus
 				// Liste in den Heap als
 				// einelementige Baeume
 				// einfuegen
 				huffmanHeap.insert(new HuffmanTree(dictionary.get(i)));
 				heapSize++;
-				
+
 				/** Progress **/
 				progress++;
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress())+ "%");
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("komprimiere: erstelle Baum..."
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
-				
+
 			}
 			int phase = 0;
 			int heapsizeBefore = huffmanHeap.getSize();
 			HuffmanTree finalHuffman = new HuffmanTree();
 			// Huffman-Algo
-			
+
 			while (heapSize > 1) { // der letzte Baum im Heap ist Huffmanbaum
 
 				HuffmanTree lowest_freq = huffmanHeap.extractMin();
@@ -327,18 +347,20 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				HuffmanTree concatHuffman = HuffmanTree.concatTwoHuffmanTrees(
 						lowest_freq, lowest2_freq);
 				phase++;
-				if (phase == heapsizeBefore - 1) { // nach n-1 Phasen ist Schluss
+				if (phase == heapsizeBefore - 1) { // nach n-1 Phasen ist
+													// Schluss
 					finalHuffman = concatHuffman;
 					break;
 				}
 				huffmanHeap.insert(concatHuffman);
 				heapSize++;
-				
+
 				/** Progress **/
 				progress++;
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress())+ "%");
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("komprimiere: erstelle Baum..."
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 			}
 			Heap<HuffmanTree> Huffman = new Heap<HuffmanTree>(finalHuffman);
@@ -350,8 +372,9 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 
 			huffmanTree = Huffman.peek();
 
-			//System.out.println("Haeufigkeit in der Wurzel des Huffmanbaums: "+ huffmanTree.root.data.freq);
-			//System.out.println("Anzahl Zeichen: " + dictionary.size());
+			// System.out.println("Haeufigkeit in der Wurzel des Huffmanbaums: "+
+			// huffmanTree.root.data.freq);
+			// System.out.println("Anzahl Zeichen: " + dictionary.size());
 			return huffmanTree;
 		}
 
@@ -364,7 +387,7 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		 *            is the targetfilename
 		 * @param huffmanTree
 		 *            is the huffmantree that is used for compression
-		 * @param sss 
+		 * @param sss
 		 */
 		private void compressFile(String sourcefile, String targetfile,
 				HuffmanTree huffmanTree, String sss) {
@@ -381,21 +404,27 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 			 * zugehoeriges Codewort als letztes in die Codetabelle geschrieben
 			 * werden.
 			 */
-			int highestChar = Collections.max(charValues); // das zeichen mit dem
+			int highestChar = Collections.max(charValues); // das zeichen mit
+															// dem
 			int highIndex;
 			String highWay;
 			for (int y = 0; y < charValues.size(); y++) {
-				if (charValues.get(y).equals(highestChar)) { // finden des hoechsten
+				if (charValues.get(y).equals(highestChar)) { // finden des
+																// hoechsten
 																// Zeichens
-					highIndex = y; // Index des hoechsten Zeichens zwischenspeichern
+					highIndex = y; // Index des hoechsten Zeichens
+									// zwischenspeichern
 					charValues.remove(highIndex); // hoechstes Zeichen aus Liste
-													// entfernen, alle Nachfolger
+													// entfernen, alle
+													// Nachfolger
 													// ruecken eine Position auf
 					charValues.add(highestChar); // und am Ende wieder anfuegen
-					highWay = codeWords.get(highIndex); // Codewort des hoechsten
+					highWay = codeWords.get(highIndex); // Codewort des
+														// hoechsten
 														// Zeichens
 														// zwischenspeichern
-					codeWords.remove(highIndex); // Codewort des hoechsten Zeichens
+					codeWords.remove(highIndex); // Codewort des hoechsten
+													// Zeichens
 													// aus Liste entfernen, alle
 													// Nachfolger ruecken eine
 													// Position auf
@@ -406,10 +435,12 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 			try {
 				/** Progress **/
 				progress++;
-				int fullProgress = (int) (1 + charValues.size() + new File(sourcefile).length());
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("komprimiere... " + Integer.toString(getProgress())+ "%");
+				int fullProgress = (int) (1 + charValues.size() + new File(
+						sourcefile).length());
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("komprimiere... "
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 
 				/** Signatur */
@@ -431,29 +462,29 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				bof.writeByte(77);
 				bof.writeByte(13);
 				bof.writeByte(10);
-				
-				for(byte b : sss.getBytes()){
+
+				for (byte b : sss.getBytes()) {
 					bof.writeByte(b);
 				}
 				bof.writeByte(13);
 				bof.writeByte(10);
-				
+
 				/**
-				 * Beginn der Codetabelle Schreiben der Codetabelle in die Datei:
-				 * Vorgabe: "hoechstes Zeichen|Zeichen1|.."
+				 * Beginn der Codetabelle Schreiben der Codetabelle in die
+				 * Datei: Vorgabe: "hoechstes Zeichen|Zeichen1|.."
 				 */
 				bof.writeByte(highestChar); // das zeichen mit dem hoechsten
 				// bytewert steht am anfang der
 				// codetabelle
-				
+
 				/** Progress **/
 				progress++;
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("komprimiere... " + Integer.toString(getProgress())+ "%");
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("komprimiere... "
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
-				
-				
+
 				/**
 				 * Jetzt ..|Zeichen1|Codewort Zeichen1|Zeichen2|Codewort
 				 * Zeichen2|...
@@ -475,7 +506,8 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						progress++;
 						setProgress(Math.min(
 								(int) (progress * 100 / fullProgress), 100));
-						lblNone.setText("komprimiere... " + Integer.toString(getProgress())+ "%");
+						lblNone.setText("komprimiere... "
+								+ Integer.toString(getProgress()) + "%");
 						/** Progress END **/
 					}
 					bof.endBitMode(); // Codeword ist zuende
@@ -508,11 +540,12 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 					}
 					/** Progress **/
 					progress++;
-					setProgress(Math.min(
-							(int) (progress * 100 / fullProgress), 100));
-					lblNone.setText("komprimiere... " + Integer.toString(getProgress())+ "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress),
+							100));
+					lblNone.setText("komprimiere... "
+							+ Integer.toString(getProgress()) + "%");
 					/** Progress END **/
-					
+
 					byteRead = bis.read();
 				}
 				bis.close();
@@ -523,9 +556,9 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//System.err.println("Komprimierung abgeschlossen!");
+			// System.err.println("Komprimierung abgeschlossen!");
 		}
-		
+
 		/*
 		 * This Method is called while reading the begin of the compressed file,
 		 * when a codeword was found.
@@ -542,7 +575,10 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 			decompTree.chars.add(character);
 		}
 
-		/* This method generates the tree, from the information of its dictionary. */
+		/*
+		 * This method generates the tree, from the information of its
+		 * dictionary.
+		 */
 		public void rebuildTree(HuffmanTree decompTree) {
 			for (int i = 0; i < decompTree.codeWords.size(); i++) {
 				decompTree.constructWayToLeaf(decompTree.codeWords.get(i),
@@ -551,13 +587,12 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		}
 
 		/** Das Einlesen der Codetabelle funktioniert jetzt ! */
-		public void decompressFile(String sourceFile,
-				String targetFile) {
+		public void decompressFile(String sourceFile, String targetFile) {
 			/** Progress **/
 			lblNone.setText("dekomprimiere...");
 			int progress = 0;
 			/** Progress END **/
-			
+
 			HuffmanTree decompTree = new HuffmanTree();
 			String codeword = "";
 			int c;
@@ -567,38 +602,44 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				bif = new BitInputFile(sourceFile);
 				/** Progress **/
 				progress++;
-				int fullProgress = (int) new File(sourceFile).length()*8;
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("dekomprimiere... " + Integer.toString(getProgress())+ "%");
+				int fullProgress = (int) new File(sourceFile).length() * 8;
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("dekomprimiere... "
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 				int breaks = 0;
 				int b = bif.readByte();
 				int b2 = bif.readByte();
-				while (b != 13 && b2 != 10 && breaks <= 1) {
-					if(b == 13 && b2 == 10){
+				while (true) {
+					if (b == 13 && b2 == 10) {
 						breaks++;
 					}
-					b = bif.readByte();
+					if (breaks == 2) {
+						break;
+					}
+					b = b2;
 					b2 = bif.readByte();
 				}
-				highestChar = bif.readByte(); // Einlesen des ersten Bytes, welches
-				// der Wert des hoechsten Zeichens
-				// ist
-				System.out.println("hoechstes Zeichen : " + highestChar);
+				highestChar = bif.readByte(); // Einlesen des ersten Bytes,
+												// welches
 				c = Integer.MIN_VALUE;
 				int blabla = 0;
 
-				while (c <= highestChar) { // das hoechste zeichen kennzeichnet das
+				while (c <= highestChar) { // das hoechste zeichen kennzeichnet
+											// das
 					// letzte wort der codetabelle
-					c = bif.readByte(); // Char-Wert des aktuellen Zeichens auslesen
-					//System.out.println("Zeichen: " + c);
+					c = bif.readByte(); // Char-Wert des aktuellen Zeichens
+										// auslesen
+					// System.out.println("Zeichen: " + c);
 					handleChar(c, decompTree); // zeichenwert uebergeben
-					int bitsleft = bif.beginBitMode(); // Anzahl der Bits die nun
+					int bitsleft = bif.beginBitMode(); // Anzahl der Bits die
+														// nun
 					// gelesen werden koennen.
 					// das muesste ja eigentlich
 					// dann bis zum naechsten
-					// int bzw byte in der Datei sein. also ist bitsleft die laenge
+					// int bzw byte in der Datei sein. also ist bitsleft die
+					// laenge
 					// des aktuellen codeworts.
 					while (bitsleft > 0) {
 						if (bif.readBit()) { // hat eine '1' gelesen
@@ -609,22 +650,24 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						bitsleft--;
 						blabla++;
 					}
-					handleCodeword(codeword, decompTree); // codewort in die liste einfuegen
-					//System.out.println("Codewort: " + codeword);
+					handleCodeword(codeword, decompTree); // codewort in die
+															// liste einfuegen
+					// System.out.println("Codewort: " + codeword);
 					codeword = ""; // codewort-string wieder leeren
 					bif.endBitMode();
 					if (c == highestChar) {
-						//System.out.println("--- Hier endet die Codetabelle. ---");
+						// System.out.println("--- Hier endet die Codetabelle. ---");
 						bif.beginBitMode();
 						break;
 					}
-					blabla+=8;
+					blabla += 8;
 				}
 				/** Progress **/
-				progress+=blabla;
-				setProgress(Math.min(
-						(int) (progress * 100 / fullProgress), 100));
-				lblNone.setText("dekomprimiere... " + Integer.toString(getProgress())+ "%");
+				progress += blabla;
+				setProgress(Math
+						.min((int) (progress * 100 / fullProgress), 100));
+				lblNone.setText("dekomprimiere... "
+						+ Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 
 				rebuildTree(decompTree); // Huffmanbaum rekonstruieren
@@ -646,7 +689,8 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 
 					// System.out.println("bin in while-schleife");
 					// bif.readBit();
-					// Bits ablaufen bis man in einem Blatt gelandet ist, Zeichen
+					// Bits ablaufen bis man in einem Blatt gelandet ist,
+					// Zeichen
 					// aus dem Knoten rausgreifen, schreiben und zurueck zur
 					// wurzel... bis fertig
 					if (node.isLeaf()) {
@@ -669,12 +713,13 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 						bitsLeft = bif.bitsLeft();
 					else
 						bitsLeft--;
-					
+
 					/** Progress **/
 					progress++;
-					setProgress(Math.min(
-							(int) (progress * 100 / fullProgress), 100));
-					lblNone.setText("dekomprimiere... " + Integer.toString(getProgress())+ "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress),
+							100));
+					lblNone.setText("dekomprimiere... "
+							+ Integer.toString(getProgress()) + "%");
 					/** Progress END **/
 
 				}
@@ -685,7 +730,11 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 				bos.close();
 
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "<html><font size='2'>Datei kann nicht gelesen werden!</font></html>", "Fehler", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"<html><font size='2'>Datei kann nicht gelesen werden!</font></html>",
+								"Fehler", JOptionPane.ERROR_MESSAGE);
 				e.printStackTrace();
 			}
 		}
@@ -710,7 +759,7 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 
 	public SplashScreen(String pass, File file, LinkedList<String> toSave) {
 		this.toSave = toSave;
-		//System.out.println(toSave.size());
+		// System.out.println(toSave.size());
 		this.save = true;
 		this.pass = pass;
 		this.file = file;
@@ -719,10 +768,9 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		frame.setVisible(true);
 	}
 
-	public SplashScreen(String pass, File file, LinkedList<String> tr,
-			boolean b) {
+	public SplashScreen(String pass, File file, LinkedList<String> tr, boolean b) {
 		this.toSave = tr;
-		//System.out.println(toSave.size());
+		// System.out.println(toSave.size());
 		this.save = true;
 		this.pass = pass;
 		this.file = file;
@@ -746,12 +794,14 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		frame = new JXFrame();
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
+				LoginForm.class.getResource("/images/s!logo.png")));
 		frame.setTitle("");
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
-		frame.setBounds(screenWidth/2-225, screenHeight/2-150, 450, 300);
+		frame.setBounds(screenWidth / 2 - 225, screenHeight / 2 - 150, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setUndecorated(true);
 		frame.getRootPaneExt().getContentPane().setLayout(null);
@@ -760,14 +810,15 @@ public class SplashScreen implements PropertyChangeListener, WindowListener {
 		progressBar = new JProgressBar();
 		progressBar.setBounds(10, 275, 430, 14);
 		frame.getRootPaneExt().getContentPane().add(progressBar);
-		
+
 		lblNone = new JXLabel();
 		lblNone.setText("speichern...");
 		lblNone.setBounds(10, 260, 400, 14);
 		frame.getRootPaneExt().getContentPane().add(lblNone);
-		
+
 		JXLabel lblSasad = new JXLabel();
-		lblSasad.setIcon(new ImageIcon(SplashScreen.class.getResource("/images/s!logo.png")));
+		lblSasad.setIcon(new ImageIcon(SplashScreen.class
+				.getResource("/images/s!logo.png")));
 		lblSasad.setBounds(10, 11, 430, 238);
 		frame.getRootPaneExt().getContentPane().add(lblSasad);
 	}

@@ -184,7 +184,6 @@ public class LoginForm {
 						((JXButton) ttt.getComponent(0)).setText(fileFC
 								.getAbsolutePath());
 					}
-					// This is where a real application would open the file.
 				}
 			}
 		});
@@ -261,7 +260,7 @@ public class LoginForm {
 								TypeToGiveBack.HEXSTRING);
 						sss = (String) SHA.getHash(sss, "Sha-512",
 								TypeToGiveBack.HEXSTRING);
-						if (new String(pa)
+						if (new String(Base64.getUrlDecoder().decode(pa))
 								.equals(sss)) {
 							if (chckbxDateipfadMerken.isSelected()
 									&& !chckbxPasswortSpeichern.isSelected()) {
