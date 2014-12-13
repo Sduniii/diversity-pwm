@@ -370,7 +370,7 @@ public class PWForm {
 		btnNeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				model.addRow(new Object[] { "", "", "" });
-				table.changeSelection(model.getRowCount() - 1, 0, false, false);
+				table.changeSelection(table.getRowSorter().convertRowIndexToView(model.getRowCount()-1), 0, false, false);
 				table.requestFocus();
 			}
 		});
