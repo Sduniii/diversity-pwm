@@ -117,7 +117,7 @@ public class LoginForm {
 		frame.setResizable(false);
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
-		frame.setTitle("Anmeldung");
+		frame.setTitle("diversityPWM");
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();

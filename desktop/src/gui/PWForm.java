@@ -137,7 +137,7 @@ public class PWForm extends JXFrame implements WindowListener,
 		getFrame().setIconImage(
 				Toolkit.getDefaultToolkit().getImage(
 						LoginForm.class.getResource("/images/s!logo.png")));
-		getFrame().setTitle("PWM");
+		getFrame().setTitle("diversityPWM");
 		getFrame().addWindowListener(this);
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice();
@@ -209,7 +209,8 @@ public class PWForm extends JXFrame implements WindowListener,
 							"HTML Dateien (*.html,*htm)", "htm", "html");
 					fc.setFileFilter(filter);
 					if (fc.showOpenDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
-						HTMLParser parser = new HTMLParser(getFrame(), fc.getSelectedFile());
+						HTMLParser parser = new HTMLParser(getFrame(), fc
+								.getSelectedFile());
 						parser.execute();
 					}
 				} catch (Exception ex) {
@@ -223,21 +224,26 @@ public class PWForm extends JXFrame implements WindowListener,
 		JMenuItem mntmPasswortndern = new JMenuItem("Passwort \u00E4ndern");
 		mntmPasswortndern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String s = (String) JOptionPane.showInputDialog(getFrame(),
-						"neues Passwort", "Passwort ändern",
-						JOptionPane.PLAIN_MESSAGE, null, null, "");
-				if (s != null) {
-					if (s.length() >= 6) {
-						pass = s;
-						JOptionPane.showMessageDialog(getFrame(),
-								"Passwort erfolgreich geändert",
-								"Passwort geändert",
-								JOptionPane.INFORMATION_MESSAGE);
-						saveButtonClicked();
-					} else {
-						JOptionPane.showMessageDialog(getFrame(),
-								"Passwort zu klein", "Passwort Fehler",
-								JOptionPane.WARNING_MESSAGE);
+				MyJPasswordPane pane = new MyJPasswordPane();
+				pane.createDialog(getFrame(), "Passwort:").setVisible(true);
+				String ss = pane.getPassword();
+				if ((ss).equals(pass)) {
+					String s = (String) JOptionPane.showInputDialog(getFrame(),
+							"neues Passwort", "Passwort ändern",
+							JOptionPane.PLAIN_MESSAGE, null, null, "");
+					if (s != null) {
+						if (s.length() >= 6) {
+							pass = s;
+							JOptionPane.showMessageDialog(getFrame(),
+									"Passwort erfolgreich geändert",
+									"Passwort geändert",
+									JOptionPane.INFORMATION_MESSAGE);
+							saveButtonClicked();
+						} else {
+							JOptionPane.showMessageDialog(getFrame(),
+									"Passwort zu klein", "Passwort Fehler",
+									JOptionPane.WARNING_MESSAGE);
+						}
 					}
 				}
 			}
@@ -326,6 +332,7 @@ public class PWForm extends JXFrame implements WindowListener,
 				scrollPane.setBounds(10, 11, getFrame().getWidth() - 36,
 						getFrame().getHeight() - 111
 								- getStatusbar().getHeight());
+				scrollPane.validate();
 				scrollPane.repaint();
 				btnLschen.setBounds(160, getFrame().getHeight() - 89
 						- getStatusbar().getHeight(), 71, 23);
@@ -412,13 +419,14 @@ public class PWForm extends JXFrame implements WindowListener,
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				if (table.getSelectedRows().length > 0){
+				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
 							"Passwörter l\u00F6schen?", "Löschen",
-							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
+							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
-						   for(int i=0;i<rows.length;i++){
-							model.removeRow(table.convertRowIndexToModel(rows[i]-i));
+						for (int i = 0; i < rows.length; i++) {
+							model.removeRow(table
+									.convertRowIndexToModel(rows[i] - i));
 						}
 					}
 				}
@@ -445,13 +453,14 @@ public class PWForm extends JXFrame implements WindowListener,
 		btnLschen = new JXButton();
 		btnLschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (table.getSelectedRows().length > 0){
+				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
 							"Passwörter l\u00F6schen?", "Löschen",
-							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
+							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
-						   for(int i=0;i<rows.length;i++){
-							model.removeRow(table.convertRowIndexToModel(rows[i]-i));
+						for (int i = 0; i < rows.length; i++) {
+							model.removeRow(table
+									.convertRowIndexToModel(rows[i] - i));
 						}
 					}
 				}
@@ -602,6 +611,8 @@ public class PWForm extends JXFrame implements WindowListener,
 	public void windowOpened(WindowEvent e) {
 
 	}
+
+	// Getter and Setter
 
 	/**
 	 * @return the frame
