@@ -43,13 +43,17 @@ import tools.SHA;
 import tools.SHA.TypeToGiveBack;
 
 public class LoginForm {
+	
+	/**
+	 * global variable
+	 */
 	private JXFrame frame;
-	JXLoginPane loginPane;
+	private JXLoginPane loginPane;
 	private MyJFileChooser fc = new MyJFileChooser();
-	File fileFC = null;
-	JPanel ttt;
-	JPasswordField ssss;
-	JCheckBox chckbxDateipfadMerken, chckbxPasswortSpeichern;
+	private File fileFC = null;
+	private JPanel ttt;
+	private JPasswordField ssss;
+	private JCheckBox chckbxDateipfadMerken, chckbxPasswortSpeichern;
 	private final File optionFile = new File(System.getProperty("user.dir")
 			+ System.getProperty("file.separator") + "opt.ini");
 
@@ -61,9 +65,9 @@ public class LoginForm {
 			public void run() {
 				try {
 					LoginForm window = new LoginForm();
-					window.frame.setVisible(true);
-					window.ssss.requestFocus();
-					window.ssss.selectAll();
+					window.getFrame().setVisible(true);
+					window.getPswdField().requestFocus();
+					window.getPswdField().selectAll();
 				} catch (Exception e) {
 					Log.write(e);
 				}
@@ -87,21 +91,20 @@ public class LoginForm {
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			Log.write(e);
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		String pfad = "...";
 		String sPa = "";
-		if (optionFile.exists()) {
+		if (getOptionFile().exists()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(
-						optionFile));
+						getOptionFile()));
 				String li = br.readLine();
 				while (li != null) {
 					if (li.contains("F||")) {
 						pfad = li.replace("F||", "");
-						fileFC = new File(pfad);
+						setFile(new File(pfad));
 					} else if (li.contains("P||")) {
 						sPa = li.replace("P||", "");
 						sPa = AES.decode("d!dPzEdD#14bTS", sPa);
@@ -113,19 +116,19 @@ public class LoginForm {
 				Log.write(e);
 			}
 		}
-		frame = new JXFrame();
-		frame.setResizable(false);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
+		setFrame(new JXFrame());
+		getFrame().setResizable(false);
+		getFrame().setIconImage(Toolkit.getDefaultToolkit().getImage(
 				LoginForm.class.getResource("/images/s!logo.png")));
-		frame.setTitle("diversityPWM");
+		getFrame().setTitle("diversityPWM");
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
 				.getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
-		frame.setBounds(screenWidth / 2 - 220, screenHeight / 2 - 133, 440, 266);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getRootPaneExt().getContentPane().setLayout(null);
-		frame.addKeyListener(new KeyAdapter() {
+		getFrame().setBounds(screenWidth / 2 - 220, screenHeight / 2 - 133, 440, 266);
+		getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getFrame().getRootPaneExt().getContentPane().setLayout(null);
+		getFrame().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_ENTER) {
@@ -134,13 +137,13 @@ public class LoginForm {
 			}
 		});
 
-		loginPane = new JXLoginPane();
-		loginPane.setBounds(10, 11, 414, 164);
-		loginPane.setPassword(sPa.toCharArray());
-		ssss = (JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane
+		setLoginPane(new JXLoginPane());
+		getLoginPane().setBounds(10, 11, 414, 164);
+		getLoginPane().setPassword(sPa.toCharArray());
+		setPswdField((JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane
 				.getComponent(1)).getComponent(0)).getComponent(1))
-				.getComponent(1)).getComponent(1);
-		ssss.addKeyListener(new KeyAdapter() {
+				.getComponent(1)).getComponent(1));
+		getPswdField().addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_ENTER) {
@@ -148,12 +151,12 @@ public class LoginForm {
 				}
 			}
 		});
-		ttt = (JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1))
-				.getComponent(0)).getComponent(1)).getComponent(1);
+		setFilechooserPanel((JPanel) ((JPanel) ((JPanel) ((JPanel) getLoginPane().getComponent(1))
+				.getComponent(0)).getComponent(1)).getComponent(1));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"diversITy Dateien (*.dit)", "dit");
-		fc.setFileFilter(filter);
-		fc.setDialogTitle("Passwort Datei auswählen");
+		getFilechooser().setFileFilter(filter);
+		getFilechooser().setDialogTitle("Passwort Datei auswählen");
 		JXButton btnFC = new JXButton();
 		btnFC.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
@@ -166,36 +169,35 @@ public class LoginForm {
 		btnFC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int returnVal;
-				if (loginPane.getBannerText().trim().equals("Anmeldung")) {
-					returnVal = fc.showOpenDialog(frame);
+				if (getLoginPane().getBannerText().trim().equals("Anmeldung")) {
+					returnVal = getFilechooser().showOpenDialog(frame);
 				} else {
-					returnVal = fc.showSaveDialog(frame);
+					returnVal = getFilechooser().showSaveDialog(frame);
 				}
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					fileFC = fc.getSelectedFile();
-					if (!fileFC.getName().endsWith(".dit")
-							&& !fc.getFileFilter().accept(fileFC)) {
-						if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
-							fileFC = new File(fileFC.getAbsolutePath() + ".dit");
+					setFile(getFilechooser().getSelectedFile());
+					if (!getFile().getName().endsWith(".dit")
+							&& !getFilechooser().getFileFilter().accept(getFile())) {
+						if (getFilechooser().getDialogType() == JFileChooser.SAVE_DIALOG) {
+							setFile(new File(getFile().getAbsolutePath() + ".dit"));
 						}
 					}
-					if (!fileFC.exists()
-							&& fc.getDialogType() == JFileChooser.OPEN_DIALOG) {
-						fileFC = null;
+					if (!getFile().exists()
+							&& getFilechooser().getDialogType() == JFileChooser.OPEN_DIALOG) {
+						setFile(null);
 					} else {
-						((JXButton) ttt.getComponent(0)).setText(fileFC
+						((JXButton) getFilechooserPanel().getComponent(0)).setText(getFile()
 								.getAbsolutePath());
 					}
 				}
 			}
 		});
 		btnFC.setText(pfad);
-		((JLabel) ttt.getParent().getComponent(0)).setText("Datei");
-		;
-		ttt.remove(ttt.getComponent(0));
-		ttt.add(btnFC, 0);
-		frame.getRootPaneExt().getContentPane().add(loginPane);
+		((JLabel) getFilechooserPanel().getParent().getComponent(0)).setText("Datei");
+		getFilechooserPanel().remove(getFilechooserPanel().getComponent(0));
+		getFilechooserPanel().add(btnFC, 0);
+		getFrame().getRootPaneExt().getContentPane().add(getLoginPane());
 
 		JXButton btnOk = new JXButton();
 		btnOk.addActionListener(new ActionListener() {
@@ -205,25 +207,25 @@ public class LoginForm {
 		});
 		btnOk.setText("OK");
 		btnOk.setBounds(334, 208, 90, 23);
-		frame.getRootPaneExt().getContentPane().add(btnOk);
+		getFrame().getRootPaneExt().getContentPane().add(btnOk);
 
 		JXHyperlink hprlnkNeuerBenutzer = new JXHyperlink();
 		hprlnkNeuerBenutzer.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if (loginPane.getBannerText().trim().equals("Anmeldung")) {
-					loginPane.setBannerText("Neue Datei");
-					fc.setDialogType(JFileChooser.SAVE_DIALOG);
-					fc.removeChoosableFileFilter(fc.getAcceptAllFileFilter());
-					fc.setDialogTitle("Datei erstellen...");
+				if (getLoginPane().getBannerText().trim().equals("Anmeldung")) {
+					getLoginPane().setBannerText("Neue Datei");
+					getFilechooser().setDialogType(JFileChooser.SAVE_DIALOG);
+					getFilechooser().removeChoosableFileFilter(fc.getAcceptAllFileFilter());
+					getFilechooser().setDialogTitle("Datei erstellen...");
 					hprlnkNeuerBenutzer.setText("Laden");
 					btnOk.setText("Erstellen");
 				} else {
-					loginPane.setBannerText("Anmeldung");
+					getLoginPane().setBannerText("Anmeldung");
 					hprlnkNeuerBenutzer.setText("Neue Datei");
-					fc.setDialogType(JFileChooser.OPEN_DIALOG);
-					fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
-					fc.setDialogTitle("Passwort Datei auswählen");
+					getFilechooser().setDialogType(JFileChooser.OPEN_DIALOG);
+					getFilechooser().addChoosableFileFilter(fc.getAcceptAllFileFilter());
+					getFilechooser().setDialogTitle("Passwort Datei auswählen");
 					btnOk.setText("OK");
 				}
 			}
@@ -232,143 +234,152 @@ public class LoginForm {
 		hprlnkNeuerBenutzer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		hprlnkNeuerBenutzer.setText("Neue Datei");
 		hprlnkNeuerBenutzer.setBounds(268, 210, 76, 19);
-		frame.getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
+		getFrame().getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
 
-		chckbxPasswortSpeichern = new JCheckBox("Passwort merken?");
-		chckbxPasswortSpeichern.setBounds(10, 208, 123, 23);
+		setChckbxPasswortSpeichern(new JCheckBox("Passwort merken?"));
+		getChckbxPasswortSpeichern().setBounds(10, 208, 123, 23);
 		if (sPa != "")
-			chckbxPasswortSpeichern.setSelected(true);
-		frame.getRootPaneExt().getContentPane().add(chckbxPasswortSpeichern);
+			getChckbxPasswortSpeichern().setSelected(true);
+		getFrame().getRootPaneExt().getContentPane().add(getChckbxPasswortSpeichern());
 
-		chckbxDateipfadMerken = new JCheckBox("Dateipfad merken?");
-		chckbxDateipfadMerken.setSelected(true);
-		chckbxDateipfadMerken.setBounds(10, 182, 123, 23);
-		frame.getRootPaneExt().getContentPane().add(chckbxDateipfadMerken);
+		setChckbxDateipfadMerken(new JCheckBox("Dateipfad merken?"));
+		getChckbxDateipfadMerken().setSelected(true);
+		getChckbxDateipfadMerken().setBounds(10, 182, 123, 23);
+		getFrame().getRootPaneExt().getContentPane().add(getChckbxDateipfadMerken());
 	}
 
+	
+	
+	/**
+	 * Create
+	 */
 	@SuppressWarnings("resource")
 	private void createActions() {
 		try {
 			// System.out.println(System.getProperty("user.dir")+System.getProperty("file.separator")
 			// + loginPane.getUserName() + ".ts");
-			if (loginPane.getBannerText().trim().equals("Anmeldung")) {
-				if (fileFC != null) {
-					if (fileFC != null && fileFC.exists()) {
+			if (getLoginPane().getBannerText().trim().equals("Anmeldung")) {
+				if (getFile() != null) {
+					if (getFile() != null && getFile().exists()) {
 						BufferedReader fr = new BufferedReader(new FileReader(
-								fileFC));
+								getFile()));
 						String pa = fr.readLine();
 						pa = fr.readLine();
 						String sss = (String) SHA.getHash(
-								new String(loginPane.getPassword()), "Sha-512",
+								new String(getLoginPane().getPassword()), "Sha-512",
 								TypeToGiveBack.HEXSTRING);
 						sss = (String) SHA.getHash(sss, "Sha-512",
 								TypeToGiveBack.HEXSTRING);
 						if (new String(Base64.getUrlDecoder().decode(pa))
 								.equals(sss)) {
-							if (chckbxDateipfadMerken.isSelected()
-									&& !chckbxPasswortSpeichern.isSelected()) {
+							if (getChckbxDateipfadMerken().isSelected()
+									&& !getChckbxPasswortSpeichern().isSelected()) {
 								try {
 									BufferedWriter bw = new BufferedWriter(
-											new FileWriter(optionFile));
-									bw.write("F||" + fileFC.getAbsolutePath());
+											new FileWriter(getOptionFile()));
+									bw.write("F||" + getFile().getAbsolutePath());
 									bw.close();
 								} catch (Exception ex) {
 									Log.write(ex);
 								}
-							} else if (chckbxPasswortSpeichern.isSelected()
-									&& !chckbxDateipfadMerken.isSelected()) {
+							} else if (getChckbxPasswortSpeichern().isSelected()
+									&& !getChckbxDateipfadMerken().isSelected()) {
 								try {
 									BufferedWriter bw = new BufferedWriter(
-											new FileWriter(optionFile));
+											new FileWriter(getOptionFile()));
 									bw.write("P||"
-											+ new String(loginPane
+											+ new String(getLoginPane()
 													.getPassword()));
 									bw.close();
 								} catch (Exception ex) {
 									Log.write(ex);
 								}
-							} else if (chckbxDateipfadMerken.isSelected()
-									&& chckbxPasswortSpeichern.isSelected()) {
+							} else if (getChckbxDateipfadMerken().isSelected()
+									&& getChckbxPasswortSpeichern().isSelected()) {
 								try {
 									BufferedWriter bw = new BufferedWriter(
-											new FileWriter(optionFile));
-									bw.write("F||" + fileFC.getAbsolutePath());
+											new FileWriter(getOptionFile()));
+									bw.write("F||" + getFile().getAbsolutePath());
 									bw.newLine();
 									bw.write("P||"
 											+ AES.encode(
 													"d!dPzEdD#14bTS",
-													new String(loginPane
+													new String(getLoginPane()
 															.getPassword())));
 									bw.close();
 								} catch (Exception ex) {
 									Log.write(ex);
 								}
 							} else {
-								optionFile.delete();
+								getOptionFile().delete();
 							}
-							frame.dispose();
+							getFrame().dispose();
 
 							new SplashScreen(
-									new String(loginPane.getPassword()), fileFC);
+									new String(getLoginPane().getPassword()), getFile());
 
 						} else {
-							JOptionPane.showMessageDialog(frame,
+							JOptionPane.showMessageDialog(getFrame(),
 									"falsches Passwort!", "Fehler",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
-						JOptionPane.showMessageDialog(frame,
+						JOptionPane.showMessageDialog(getFrame(),
 								"Datei existiert nicht!", "Fehler",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog(getFrame(),
 							"keine Datei ausgewählt!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
-				if (fileFC == null || fileFC.exists()) {
-					JOptionPane.showMessageDialog(frame,
+				if (getFile() == null){
+					JOptionPane.showMessageDialog(getFrame(),
+							"Datei existiert nicht!", "Fehler",
+							JOptionPane.ERROR_MESSAGE);
+				}else if(getFile().exists()) {
+					JOptionPane.showMessageDialog(getFrame(),
 							"Datei existiert bereits!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					if (fileFC != null) {
-						if (loginPane.getPassword().length >= 6) {
+					if (getFile() != null) {
+						if (getLoginPane().getPassword().length >= 6) {
 
 							String sss = (String) SHA.getHash(new String(
-									loginPane.getPassword()), "Sha-512",
+									getLoginPane().getPassword()), "Sha-512",
 									TypeToGiveBack.HEXSTRING);
 							sss = (String) SHA.getHash(sss, "Sha-512",
 									TypeToGiveBack.HEXSTRING);
-							CreateFile.startCreate(fileFC.getAbsolutePath()
-									+ "tmp", fileFC.getAbsolutePath(), sss);
-							JOptionPane.showMessageDialog(frame,
+							CreateFile.startCreate(getFile().getAbsolutePath()
+									+ "tmp", getFile().getAbsolutePath(), sss);
+							JOptionPane.showMessageDialog(getFrame(),
 									"Datei erstellt!", "OK",
 									JOptionPane.INFORMATION_MESSAGE);
 						} else {
-							JOptionPane.showMessageDialog(frame,
+							JOptionPane.showMessageDialog(getFrame(),
 									"Passwort zu klein!", "Fehler",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
-						if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-							fileFC = fc.getSelectedFile();
-							((JXButton) ttt.getComponent(0)).setText(fileFC
+						if (getFilechooser().showSaveDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
+							setFile(getFilechooser().getSelectedFile());
+							((JXButton) getFilechooserPanel().getComponent(0)).setText(getFile()
 									.getAbsolutePath());
-							if (loginPane.getPassword().length >= 6) {
+							if (getLoginPane().getPassword().length >= 6) {
 
 								String sss = (String) SHA.getHash(new String(
-										loginPane.getPassword()), "Sha-512",
+										getLoginPane().getPassword()), "Sha-512",
 										TypeToGiveBack.HEXSTRING);
 								sss = (String) SHA.getHash(sss, "Sha-512",
 										TypeToGiveBack.HEXSTRING);
-								CreateFile.startCreate(fileFC.getAbsolutePath()
-										+ "tmp", fileFC.getAbsolutePath(), sss);
-								JOptionPane.showMessageDialog(frame,
+								CreateFile.startCreate(getFile().getAbsolutePath()
+										+ "tmp", getFile().getAbsolutePath(), sss);
+								JOptionPane.showMessageDialog(getFrame(),
 										"Datei erstellt!", "OK",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
-								JOptionPane.showMessageDialog(frame,
+								JOptionPane.showMessageDialog(getFrame(),
 										"Passwort zu klein!", "Fehler",
 										JOptionPane.ERROR_MESSAGE);
 							}
@@ -379,5 +390,138 @@ public class LoginForm {
 		} catch (Exception e) {
 			Log.write(e);
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * 
+	 *	/~_ _ _|__|_ _  _   _  _  _|  (~ _ _|__|_ _  _
+	 *	\_/(/_ |  | (/_|   (_|| |(_|  _)(/_ |  | (/_| 
+	 * 
+	 * 
+	 */
+	
+	
+	
+	/**
+	 * @return the frame
+	 */
+	public JXFrame getFrame() {
+		return frame;
+	}
+
+	/**
+	 * @param frame the frame to set
+	 */
+	public void setFrame(JXFrame frame) {
+		this.frame = frame;
+	}
+
+	/**
+	 * @return the loginPane
+	 */
+	public JXLoginPane getLoginPane() {
+		return loginPane;
+	}
+
+	/**
+	 * @param loginPane the loginPane to set
+	 */
+	public void setLoginPane(JXLoginPane loginPane) {
+		this.loginPane = loginPane;
+	}
+
+	/**
+	 * @return the fc
+	 */
+	public MyJFileChooser getFilechooser() {
+		return fc;
+	}
+
+	/**
+	 * @param fc the fc to set
+	 */
+	public void setFilechooser(MyJFileChooser fc) {
+		this.fc = fc;
+	}
+
+	/**
+	 * @return the fileFC
+	 */
+	public File getFile() {
+		return fileFC;
+	}
+
+	/**
+	 * @param fileFC the fileFC to set
+	 */
+	public void setFile(File fileFC) {
+		this.fileFC = fileFC;
+	}
+
+	/**
+	 * @return the ttt
+	 */
+	public JPanel getFilechooserPanel() {
+		return ttt;
+	}
+
+	/**
+	 * @param ttt the ttt to set
+	 */
+	public void setFilechooserPanel(JPanel ttt) {
+		this.ttt = ttt;
+	}
+
+	/**
+	 * @return the ssss
+	 */
+	public JPasswordField getPswdField() {
+		return ssss;
+	}
+
+	/**
+	 * @param ssss the ssss to set
+	 */
+	public void setPswdField(JPasswordField ssss) {
+		this.ssss = ssss;
+	}
+
+	/**
+	 * @return the chckbxDateipfadMerken
+	 */
+	public JCheckBox getChckbxDateipfadMerken() {
+		return chckbxDateipfadMerken;
+	}
+
+	/**
+	 * @param chckbxDateipfadMerken the chckbxDateipfadMerken to set
+	 */
+	public void setChckbxDateipfadMerken(JCheckBox chckbxDateipfadMerken) {
+		this.chckbxDateipfadMerken = chckbxDateipfadMerken;
+	}
+
+	/**
+	 * @return the chckbxPasswortSpeichern
+	 */
+	public JCheckBox getChckbxPasswortSpeichern() {
+		return chckbxPasswortSpeichern;
+	}
+
+	/**
+	 * @param chckbxPasswortSpeichern the chckbxPasswortSpeichern to set
+	 */
+	public void setChckbxPasswortSpeichern(JCheckBox chckbxPasswortSpeichern) {
+		this.chckbxPasswortSpeichern = chckbxPasswortSpeichern;
+	}
+
+	/**
+	 * @return the optionFile
+	 */
+	public File getOptionFile() {
+		return optionFile;
 	}
 }
