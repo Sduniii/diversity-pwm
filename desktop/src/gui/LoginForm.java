@@ -107,7 +107,7 @@ public class LoginForm {
 						setFile(new File(pfad));
 					} else if (li.contains("P||")) {
 						sPa = li.replace("P||", "");
-						sPa = AES.decode("d!dPzEdD#14bTS", sPa);
+						sPa = AES.decode("5CMFs4pd=~:@Iva8MH*}~S!K[B/&bK", sPa);
 					}
 					li = br.readLine();
 				}
@@ -303,7 +303,7 @@ public class LoginForm {
 									bw.newLine();
 									bw.write("P||"
 											+ AES.encode(
-													"d!dPzEdD#14bTS",
+													"5CMFs4pd=~:@Iva8MH*}~S!K[B/&bK",
 													new String(getLoginPane()
 															.getPassword())));
 									bw.close();
