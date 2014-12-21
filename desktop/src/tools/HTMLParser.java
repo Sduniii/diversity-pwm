@@ -88,7 +88,7 @@ public class HTMLParser extends SwingWorker<Void, Void> {
 			in.close();
 			return null;
 		} catch (Exception ex) {
-			Log.write(ex.getMessage());
+			Log.write(ex);
 			JOptionPane.showMessageDialog(pScreen, "Fehler beim lesen der HTML", "Fehler", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -111,7 +111,7 @@ public class HTMLParser extends SwingWorker<Void, Void> {
 			this.pScreen.repaint();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(pScreen, "Fehler beim lesen der HTML", "Fehler", JOptionPane.ERROR_MESSAGE);
-			Log.write(ex.getMessage());
+			Log.write(ex);
 		}finally{
 			pScreen.setCursor(null);
 			pScreen.setEnabled(true);

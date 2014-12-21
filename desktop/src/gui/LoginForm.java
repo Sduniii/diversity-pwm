@@ -65,7 +65,7 @@ public class LoginForm {
 					window.ssss.requestFocus();
 					window.ssss.selectAll();
 				} catch (Exception e) {
-					Log.write(e.getMessage());
+					Log.write(e);
 				}
 			}
 		});
@@ -88,7 +88,7 @@ public class LoginForm {
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
-			Log.write(e.getMessage());
+			Log.write(e);
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		String pfad = "...";
@@ -110,7 +110,7 @@ public class LoginForm {
 				}
 				br.close();
 			} catch (IOException e) {
-				Log.write(e.getMessage());
+				Log.write(e);
 			}
 		}
 		frame = new JXFrame();
@@ -273,7 +273,7 @@ public class LoginForm {
 									bw.write("F||" + fileFC.getAbsolutePath());
 									bw.close();
 								} catch (Exception ex) {
-									Log.write(ex.getMessage());
+									Log.write(ex);
 								}
 							} else if (chckbxPasswortSpeichern.isSelected()
 									&& !chckbxDateipfadMerken.isSelected()) {
@@ -285,7 +285,7 @@ public class LoginForm {
 													.getPassword()));
 									bw.close();
 								} catch (Exception ex) {
-									Log.write(ex.getMessage());
+									Log.write(ex);
 								}
 							} else if (chckbxDateipfadMerken.isSelected()
 									&& chckbxPasswortSpeichern.isSelected()) {
@@ -301,7 +301,7 @@ public class LoginForm {
 															.getPassword())));
 									bw.close();
 								} catch (Exception ex) {
-									Log.write(ex.getMessage());
+									Log.write(ex);
 								}
 							} else {
 								optionFile.delete();
@@ -376,8 +376,8 @@ public class LoginForm {
 					}
 				}
 			}
-		} catch (IOException e) {
-			Log.write(e.getMessage());
+		} catch (Exception e) {
+			Log.write(e);
 		}
 	}
 }

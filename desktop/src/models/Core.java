@@ -208,7 +208,7 @@ public class Core extends SwingWorker<Void, Void> {
 			return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			Log.write(ex.getMessage());
+			Log.write(ex);
 			return null;
 		}
 	}
@@ -279,7 +279,7 @@ public class Core extends SwingWorker<Void, Void> {
 			//System.out.println("Datei erfolgreich eingelesen!");
 		} catch (IOException e) {
 			//System.err.println("Die Datei wurde nicht gefunden!");
-			Log.write(e.getMessage());
+			Log.write(e);
 		}
 		return dictionary;
 	}
@@ -375,7 +375,7 @@ public class Core extends SwingWorker<Void, Void> {
 		if (huffmanHeap.getSize() == 1) {
 			//System.out.println("HuffmanTree erfolgreich aufgebaut!");
 		} else
-			Log.write("Heap hat nicht korrekte Groesse");
+			Log.write(new Exception("Heap hat nicht korrekte Groesse"));
 
 		huffmanTree = Huffman.peek();
 
@@ -559,7 +559,7 @@ public class Core extends SwingWorker<Void, Void> {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			Log.write(e.getMessage());
+			Log.write(e);
 		}
 		// System.err.println("Komprimierung abgeschlossen!");
 	}
@@ -737,7 +737,7 @@ public class Core extends SwingWorker<Void, Void> {
 							null,
 							"<html><font size='2'>Datei kann nicht gelesen werden!</font></html>",
 							"Fehler", JOptionPane.ERROR_MESSAGE);
-			Log.write(e.getMessage());
+			Log.write(e);
 		}
 	}
 
@@ -841,7 +841,7 @@ public class Core extends SwingWorker<Void, Void> {
 				}
 				this.pScreen.repaint();
 			} catch (Exception ex) {
-				Log.write(ex.getMessage());
+				Log.write(ex);
 			}
 			pScreen.setCursor(null);
 			pScreen.setEnabled(true);

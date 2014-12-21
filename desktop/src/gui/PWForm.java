@@ -110,7 +110,7 @@ public class PWForm extends JXFrame implements WindowListener,
 				model.addRow(new Object[] { it.next(), it.next(), it.next() });
 			}
 		} catch (Exception ex) {
-			Log.write(ex.getMessage());
+			Log.write(ex);
 		}
 		model.addTableModelListener(new TableModelListener() {
 			@Override
@@ -130,7 +130,7 @@ public class PWForm extends JXFrame implements WindowListener,
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			Log.write(e.getMessage());
+			Log.write(e);
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -213,7 +213,7 @@ public class PWForm extends JXFrame implements WindowListener,
 						parser.execute();
 					}
 				} catch (Exception ex) {
-					Log.write(ex.getMessage());
+					Log.write(ex);
 				}
 			}
 		});
