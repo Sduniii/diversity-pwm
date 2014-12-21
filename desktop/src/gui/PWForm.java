@@ -328,7 +328,6 @@ public class PWForm extends JXFrame implements WindowListener,
 
 			@Override
 			public void componentResized(ComponentEvent e) {
-				// TODO Auto-generated method stub
 				scrollPane.setBounds(10, 11, getFrame().getWidth() - 36,
 						getFrame().getHeight() - 111
 								- getStatusbar().getHeight());
@@ -352,21 +351,21 @@ public class PWForm extends JXFrame implements WindowListener,
 			}
 
 			@Override
-			public void componentMoved(ComponentEvent e) {
+			public void componentHidden(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
-			public void componentHidden(ComponentEvent e) {
+			public void componentMoved(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
-			public void componentShown(ComponentEvent e) {
+			public void componentShown(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-
+				
 			}
 		});
 		panel.setLayout(null);
@@ -612,7 +611,18 @@ public class PWForm extends JXFrame implements WindowListener,
 
 	}
 
-	// Getter and Setter
+
+
+	/**
+	 * 
+	 * 
+	 *	/~_ _ _|__|_ _  _   _  _  _|  (~ _ _|__|_ _  _
+	 *	\_/(/_ |  | (/_|   (_|| |(_|  _)(/_ |  | (/_| 
+	 * 
+	 * 
+	 */
+	
+	
 
 	/**
 	 * @return the frame
