@@ -1,6 +1,6 @@
 package huffman;
 
-import java.util.*;
+import java.util.Random;
 
 public class HeapSort {
 

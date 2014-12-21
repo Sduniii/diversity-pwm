@@ -3,7 +3,12 @@ package BitIO;
 /* You do not have to understand this code. Just use it.  If you make
    changes to this code let's hope you know what you are doing. */
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * A BitInputFile lets an application read data bit by bit in addition

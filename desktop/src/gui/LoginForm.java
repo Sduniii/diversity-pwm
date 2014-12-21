@@ -37,6 +37,7 @@ import org.jdesktop.swingx.JXLoginPane;
 
 import tools.AES;
 import tools.CreateFile;
+import tools.Log;
 import tools.MyJFileChooser;
 import tools.SHA;
 import tools.SHA.TypeToGiveBack;
@@ -64,7 +65,7 @@ public class LoginForm {
 					window.ssss.requestFocus();
 					window.ssss.selectAll();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.write(e.getMessage());
 				}
 			}
 		});
@@ -87,7 +88,7 @@ public class LoginForm {
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.write(e.getMessage());
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		String pfad = "...";
@@ -109,6 +110,7 @@ public class LoginForm {
 				}
 				br.close();
 			} catch (IOException e) {
+				Log.write(e.getMessage());
 			}
 		}
 		frame = new JXFrame();
@@ -271,7 +273,7 @@ public class LoginForm {
 									bw.write("F||" + fileFC.getAbsolutePath());
 									bw.close();
 								} catch (Exception ex) {
-
+									Log.write(ex.getMessage());
 								}
 							} else if (chckbxPasswortSpeichern.isSelected()
 									&& !chckbxDateipfadMerken.isSelected()) {
@@ -283,7 +285,7 @@ public class LoginForm {
 													.getPassword()));
 									bw.close();
 								} catch (Exception ex) {
-
+									Log.write(ex.getMessage());
 								}
 							} else if (chckbxDateipfadMerken.isSelected()
 									&& chckbxPasswortSpeichern.isSelected()) {
@@ -299,14 +301,16 @@ public class LoginForm {
 															.getPassword())));
 									bw.close();
 								} catch (Exception ex) {
-
+									Log.write(ex.getMessage());
 								}
 							} else {
 								optionFile.delete();
 							}
 							frame.dispose();
+
 							new SplashScreen(
 									new String(loginPane.getPassword()), fileFC);
+
 						} else {
 							JOptionPane.showMessageDialog(frame,
 									"falsches Passwort!", "Fehler",
@@ -336,11 +340,12 @@ public class LoginForm {
 									TypeToGiveBack.HEXSTRING);
 							sss = (String) SHA.getHash(sss, "Sha-512",
 									TypeToGiveBack.HEXSTRING);
-							CreateFile.startCreate(fileFC.getAbsolutePath() + "tmp", fileFC.getAbsolutePath(), sss);
+							CreateFile.startCreate(fileFC.getAbsolutePath()
+									+ "tmp", fileFC.getAbsolutePath(), sss);
 							JOptionPane.showMessageDialog(frame,
 									"Datei erstellt!", "OK",
 									JOptionPane.INFORMATION_MESSAGE);
-						}else{
+						} else {
 							JOptionPane.showMessageDialog(frame,
 									"Passwort zu klein!", "Fehler",
 									JOptionPane.ERROR_MESSAGE);
@@ -357,7 +362,8 @@ public class LoginForm {
 										TypeToGiveBack.HEXSTRING);
 								sss = (String) SHA.getHash(sss, "Sha-512",
 										TypeToGiveBack.HEXSTRING);
-								CreateFile.startCreate(fileFC.getAbsolutePath() + "tmp", fileFC.getAbsolutePath(), sss);
+								CreateFile.startCreate(fileFC.getAbsolutePath()
+										+ "tmp", fileFC.getAbsolutePath(), sss);
 								JOptionPane.showMessageDialog(frame,
 										"Datei erstellt!", "OK",
 										JOptionPane.INFORMATION_MESSAGE);
@@ -371,7 +377,7 @@ public class LoginForm {
 				}
 			}
 		} catch (IOException e) {
-
+			Log.write(e.getMessage());
 		}
 	}
 }
