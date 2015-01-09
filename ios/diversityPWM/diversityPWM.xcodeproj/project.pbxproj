@@ -1,0 +1,433 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DFFD90C51A4C8774008DEC4A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFD90C41A4C8774008DEC4A /* main.m */; };
+		DFFD90C81A4C8774008DEC4A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFD90C71A4C8774008DEC4A /* AppDelegate.m */; };
+		DFFD90CB1A4C8774008DEC4A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFD90CA1A4C8774008DEC4A /* ViewController.m */; };
+		DFFD90CE1A4C8774008DEC4A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DFFD90CC1A4C8774008DEC4A /* Main.storyboard */; };
+		DFFD90D01A4C8774008DEC4A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFFD90CF1A4C8774008DEC4A /* Images.xcassets */; };
+		DFFD90D31A4C8774008DEC4A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DFFD90D11A4C8774008DEC4A /* LaunchScreen.xib */; };
+		DFFD90DF1A4C8774008DEC4A /* diversityPWMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFD90DE1A4C8774008DEC4A /* diversityPWMTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DFFD90D91A4C8774008DEC4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DFFD90B71A4C8773008DEC4A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DFFD90BE1A4C8774008DEC4A;
+			remoteInfo = diversityPWM;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DFFD90BF1A4C8774008DEC4A /* diversityPWM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = diversityPWM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFFD90C31A4C8774008DEC4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFFD90C41A4C8774008DEC4A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DFFD90C61A4C8774008DEC4A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		DFFD90C71A4C8774008DEC4A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		DFFD90C91A4C8774008DEC4A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		DFFD90CA1A4C8774008DEC4A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		DFFD90CD1A4C8774008DEC4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DFFD90CF1A4C8774008DEC4A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		DFFD90D21A4C8774008DEC4A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		DFFD90D81A4C8774008DEC4A /* diversityPWMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = diversityPWMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DFFD90DD1A4C8774008DEC4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DFFD90DE1A4C8774008DEC4A /* diversityPWMTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = diversityPWMTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DFFD90BC1A4C8774008DEC4A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFFD90D51A4C8774008DEC4A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DFFD90B61A4C8773008DEC4A = {
+			isa = PBXGroup;
+			children = (
+				DFFD90C11A4C8774008DEC4A /* diversityPWM */,
+				DFFD90DB1A4C8774008DEC4A /* diversityPWMTests */,
+				DFFD90C01A4C8774008DEC4A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DFFD90C01A4C8774008DEC4A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DFFD90BF1A4C8774008DEC4A /* diversityPWM.app */,
+				DFFD90D81A4C8774008DEC4A /* diversityPWMTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DFFD90C11A4C8774008DEC4A /* diversityPWM */ = {
+			isa = PBXGroup;
+			children = (
+				DFFD90C61A4C8774008DEC4A /* AppDelegate.h */,
+				DFFD90C71A4C8774008DEC4A /* AppDelegate.m */,
+				DFFD90C91A4C8774008DEC4A /* ViewController.h */,
+				DFFD90CA1A4C8774008DEC4A /* ViewController.m */,
+				DFFD90CC1A4C8774008DEC4A /* Main.storyboard */,
+				DFFD90CF1A4C8774008DEC4A /* Images.xcassets */,
+				DFFD90D11A4C8774008DEC4A /* LaunchScreen.xib */,
+				DFFD90C21A4C8774008DEC4A /* Supporting Files */,
+			);
+			path = diversityPWM;
+			sourceTree = "<group>";
+		};
+		DFFD90C21A4C8774008DEC4A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DFFD90C31A4C8774008DEC4A /* Info.plist */,
+				DFFD90C41A4C8774008DEC4A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DFFD90DB1A4C8774008DEC4A /* diversityPWMTests */ = {
+			isa = PBXGroup;
+			children = (
+				DFFD90DE1A4C8774008DEC4A /* diversityPWMTests.m */,
+				DFFD90DC1A4C8774008DEC4A /* Supporting Files */,
+			);
+			path = diversityPWMTests;
+			sourceTree = "<group>";
+		};
+		DFFD90DC1A4C8774008DEC4A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DFFD90DD1A4C8774008DEC4A /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DFFD90BE1A4C8774008DEC4A /* diversityPWM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DFFD90E21A4C8774008DEC4A /* Build configuration list for PBXNativeTarget "diversityPWM" */;
+			buildPhases = (
+				DFFD90BB1A4C8774008DEC4A /* Sources */,
+				DFFD90BC1A4C8774008DEC4A /* Frameworks */,
+				DFFD90BD1A4C8774008DEC4A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = diversityPWM;
+			productName = diversityPWM;
+			productReference = DFFD90BF1A4C8774008DEC4A /* diversityPWM.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DFFD90D71A4C8774008DEC4A /* diversityPWMTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DFFD90E51A4C8774008DEC4A /* Build configuration list for PBXNativeTarget "diversityPWMTests" */;
+			buildPhases = (
+				DFFD90D41A4C8774008DEC4A /* Sources */,
+				DFFD90D51A4C8774008DEC4A /* Frameworks */,
+				DFFD90D61A4C8774008DEC4A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DFFD90DA1A4C8774008DEC4A /* PBXTargetDependency */,
+			);
+			name = diversityPWMTests;
+			productName = diversityPWMTests;
+			productReference = DFFD90D81A4C8774008DEC4A /* diversityPWMTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DFFD90B71A4C8773008DEC4A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "Tobias Sdun";
+				TargetAttributes = {
+					DFFD90BE1A4C8774008DEC4A = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					DFFD90D71A4C8774008DEC4A = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = DFFD90BE1A4C8774008DEC4A;
+					};
+				};
+			};
+			buildConfigurationList = DFFD90BA1A4C8773008DEC4A /* Build configuration list for PBXProject "diversityPWM" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DFFD90B61A4C8773008DEC4A;
+			productRefGroup = DFFD90C01A4C8774008DEC4A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DFFD90BE1A4C8774008DEC4A /* diversityPWM */,
+				DFFD90D71A4C8774008DEC4A /* diversityPWMTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DFFD90BD1A4C8774008DEC4A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DFFD90CE1A4C8774008DEC4A /* Main.storyboard in Resources */,
+				DFFD90D31A4C8774008DEC4A /* LaunchScreen.xib in Resources */,
+				DFFD90D01A4C8774008DEC4A /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFFD90D61A4C8774008DEC4A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DFFD90BB1A4C8774008DEC4A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DFFD90CB1A4C8774008DEC4A /* ViewController.m in Sources */,
+				DFFD90C81A4C8774008DEC4A /* AppDelegate.m in Sources */,
+				DFFD90C51A4C8774008DEC4A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DFFD90D41A4C8774008DEC4A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DFFD90DF1A4C8774008DEC4A /* diversityPWMTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DFFD90DA1A4C8774008DEC4A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DFFD90BE1A4C8774008DEC4A /* diversityPWM */;
+			targetProxy = DFFD90D91A4C8774008DEC4A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DFFD90CC1A4C8774008DEC4A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DFFD90CD1A4C8774008DEC4A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DFFD90D11A4C8774008DEC4A /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DFFD90D21A4C8774008DEC4A /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DFFD90E01A4C8774008DEC4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DFFD90E11A4C8774008DEC4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DFFD90E31A4C8774008DEC4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = diversityPWM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DFFD90E41A4C8774008DEC4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = diversityPWM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		DFFD90E61A4C8774008DEC4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = diversityPWMTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/diversityPWM.app/diversityPWM";
+			};
+			name = Debug;
+		};
+		DFFD90E71A4C8774008DEC4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = diversityPWMTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/diversityPWM.app/diversityPWM";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DFFD90BA1A4C8773008DEC4A /* Build configuration list for PBXProject "diversityPWM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFFD90E01A4C8774008DEC4A /* Debug */,
+				DFFD90E11A4C8774008DEC4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DFFD90E21A4C8774008DEC4A /* Build configuration list for PBXNativeTarget "diversityPWM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFFD90E31A4C8774008DEC4A /* Debug */,
+				DFFD90E41A4C8774008DEC4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DFFD90E51A4C8774008DEC4A /* Build configuration list for PBXNativeTarget "diversityPWMTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DFFD90E61A4C8774008DEC4A /* Debug */,
+				DFFD90E71A4C8774008DEC4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DFFD90B71A4C8773008DEC4A /* Project object */;
+}
