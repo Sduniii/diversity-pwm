@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="300" app:showAsAction="never" android:showAsAction="never"/>
+    <item android:id="@+id/action_add" android:title="Add"
+        android:orderInCategory="200" app:showAsAction="always" android:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_add"/>
+    <item android:id="@+id/action_save" android:title="Save"
+        android:orderInCategory="100" app:showAsAction="always" android:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_save"/>
+    </menu>

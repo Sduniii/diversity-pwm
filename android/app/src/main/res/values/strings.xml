@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">diversityPWM</string>
+    <string name="btnFilechooser">...</string>
+    <string name="btnLoad">Laden</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="folder">Verzeichnis</string>
+    <string name="parentDirectory">Elternverzeichnis</string>
+    <string name="fileSize">Datei Größe</string>
+    <string name="currentDir">aktuelles Verzeichnis</string>
+    <string name="errorFileNotExcist">Datei nicht vorhanden</string>
+    <string name="pBLoad">Lade...</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+
+</resources>
