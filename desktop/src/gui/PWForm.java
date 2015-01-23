@@ -125,9 +125,13 @@ public class PWForm extends JXFrame implements WindowListener,
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		String OS = System.getProperty("os.name").toLowerCase();
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			if(OS.contains("mac") || OS.contains("linux")){
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}else{
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			}
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			Log.write(e);
@@ -159,7 +163,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				if (btnSpeichern.isEnabled()) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Änderung speichern?", "Speichern",
+							"ï¿½nderung speichern?", "Speichern",
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 						onlySave();
@@ -229,14 +233,14 @@ public class PWForm extends JXFrame implements WindowListener,
 				String ss = pane.getPassword();
 				if ((ss).equals(pass)) {
 					String s = (String) JOptionPane.showInputDialog(getFrame(),
-							"neues Passwort", "Passwort ändern",
+							"neues Passwort", "Passwort ï¿½ndern",
 							JOptionPane.PLAIN_MESSAGE, null, null, "");
 					if (s != null) {
 						if (s.length() >= 6) {
 							pass = s;
 							JOptionPane.showMessageDialog(getFrame(),
-									"Passwort erfolgreich geändert",
-									"Passwort geändert",
+									"Passwort erfolgreich geï¿½ndert",
+									"Passwort geï¿½ndert",
 									JOptionPane.INFORMATION_MESSAGE);
 							saveButtonClicked();
 						} else {
@@ -420,7 +424,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent e) {
 				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passwörter l\u00F6schen?", "Löschen",
+							"Passwï¿½rter l\u00F6schen?", "Lï¿½schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
@@ -454,7 +458,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passwörter l\u00F6schen?", "Löschen",
+							"Passwï¿½rter l\u00F6schen?", "Lï¿½schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
@@ -575,7 +579,7 @@ public class PWForm extends JXFrame implements WindowListener,
 		}
 		if (btnSpeichern.isEnabled()) {
 			if (JOptionPane.showConfirmDialog(getFrame(),
-					"Änderung speichern?", "Speichern",
+					"ï¿½nderung speichern?", "Speichern",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 				onlySave();
 			} else {

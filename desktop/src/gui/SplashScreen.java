@@ -20,6 +20,8 @@ import models.Core;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 
+import tools.Log;
+
 public class SplashScreen extends JXFrame implements PropertyChangeListener, WindowListener{
 
 	/**
@@ -53,13 +55,16 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		String OS = System.getProperty("os.name").toLowerCase();
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			if(OS.contains("mac") || OS.contains("linux")){
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}else{
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			}
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.write(e);
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		this.setIconImage(

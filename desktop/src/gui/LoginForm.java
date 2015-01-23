@@ -54,8 +54,7 @@ public class LoginForm {
 	private JPanel ttt;
 	private JPasswordField ssss;
 	private JCheckBox chckbxDateipfadMerken, chckbxPasswortSpeichern;
-	private final File optionFile = new File(System.getProperty("user.dir")
-			+ System.getProperty("file.separator") + "opt.ini");
+	private File optionFile;
 
 	/**
 	 * Launch the application.
@@ -86,12 +85,32 @@ public class LoginForm {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		String OS = System.getProperty("os.name").toLowerCase();
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			if(OS.contains("mac") || OS.contains("linux")){
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			}else{
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			}
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			Log.write(e);
+		}
+		if(OS.contains("mac") || OS.contains("linux")){
+			optionFile = new File(System.getProperty("user.home") + "/Library/Application Support/de.diversity.pwm/opt.ini");
+		}else{
+			optionFile = new File(System.getProperty("user.dir")
+					+ System.getProperty("file.separator") + "opt.ini");
+		}
+		try {
+			String canonicalPath = getOptionFile().getCanonicalPath();
+			String path = canonicalPath.substring(0,canonicalPath.lastIndexOf(File.separator));
+			if(!new File(path).exists()){
+				new File(path).mkdirs();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		String pfad = "...";
@@ -156,7 +175,7 @@ public class LoginForm {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"diversITy Dateien (*.dit)", "dit");
 		getFilechooser().setFileFilter(filter);
-		getFilechooser().setDialogTitle("Passwort Datei auswählen");
+		getFilechooser().setDialogTitle("Passwort Datei auswï¿½hlen");
 		JXButton btnFC = new JXButton();
 		btnFC.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
@@ -225,7 +244,7 @@ public class LoginForm {
 					hprlnkNeuerBenutzer.setText("Neue Datei");
 					getFilechooser().setDialogType(JFileChooser.OPEN_DIALOG);
 					getFilechooser().addChoosableFileFilter(fc.getAcceptAllFileFilter());
-					getFilechooser().setDialogTitle("Passwort Datei auswählen");
+					getFilechooser().setDialogTitle("Passwort Datei auswï¿½hlen");
 					btnOk.setText("OK");
 				}
 			}
@@ -330,7 +349,7 @@ public class LoginForm {
 					}
 				} else {
 					JOptionPane.showMessageDialog(getFrame(),
-							"keine Datei ausgewählt!", "Fehler",
+							"keine Datei ausgewï¿½hlt!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
