@@ -163,7 +163,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				if (btnSpeichern.isEnabled()) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"�nderung speichern?", "Speichern",
+							"\u00C4nderung speichern?", "Speichern",
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 						onlySave();
@@ -233,14 +233,14 @@ public class PWForm extends JXFrame implements WindowListener,
 				String ss = pane.getPassword();
 				if ((ss).equals(pass)) {
 					String s = (String) JOptionPane.showInputDialog(getFrame(),
-							"neues Passwort", "Passwort �ndern",
+							"neues Passwort", "Passwort \u00E4ndern",
 							JOptionPane.PLAIN_MESSAGE, null, null, "");
 					if (s != null) {
 						if (s.length() >= 6) {
 							pass = s;
 							JOptionPane.showMessageDialog(getFrame(),
-									"Passwort erfolgreich ge�ndert",
-									"Passwort ge�ndert",
+									"Passwort erfolgreich ge\u00E4ndert",
+									"Passwort ge\u00E4ndert",
 									JOptionPane.INFORMATION_MESSAGE);
 							saveButtonClicked();
 						} else {
@@ -424,7 +424,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent e) {
 				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passw�rter l\u00F6schen?", "L�schen",
+							"Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
@@ -458,7 +458,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRows().length > 0) {
 					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passw�rter l\u00F6schen?", "L�schen",
+							"Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
@@ -579,7 +579,7 @@ public class PWForm extends JXFrame implements WindowListener,
 		}
 		if (btnSpeichern.isEnabled()) {
 			if (JOptionPane.showConfirmDialog(getFrame(),
-					"�nderung speichern?", "Speichern",
+					"\u00C4nderung speichern?", "Speichern",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 				onlySave();
 			} else {

@@ -175,7 +175,7 @@ public class LoginForm {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"diversITy Dateien (*.dit)", "dit");
 		getFilechooser().setFileFilter(filter);
-		getFilechooser().setDialogTitle("Passwort Datei ausw�hlen");
+		getFilechooser().setDialogTitle("Passwort Datei ausw\u00E4hlen");
 		JXButton btnFC = new JXButton();
 		btnFC.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
@@ -349,7 +349,7 @@ public class LoginForm {
 					}
 				} else {
 					JOptionPane.showMessageDialog(getFrame(),
-							"keine Datei ausgew�hlt!", "Fehler",
+							"keine Datei ausgew\u00E4hlt!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
