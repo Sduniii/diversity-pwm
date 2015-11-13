@@ -2,7 +2,7 @@ package huffman;
 
 import java.util.Random;
 
-public class HeapSort {
+public class HeapSortTest {
 
 	public static void heapSort(int[] array) {
 
@@ -16,7 +16,7 @@ public class HeapSort {
 
 		for (int i = 0; i < array.length; i++) {
 			sortArray[i] = heap.extractMin();
-			System.out.print(sortArray[i]);
+			System.out.print(sortArray[i]+",");
 		}
 
 	}
