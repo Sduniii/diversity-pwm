@@ -36,14 +36,24 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableRowSorter;
+
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXFrame;
+import org.jdesktop.swingx.JXLabel;
+import org.jdesktop.swingx.JXTable;
 
 import models.Core;
 import models.Core.Mode;
@@ -51,19 +61,12 @@ import models.JStatusbar;
 import models.MyJPasswordPane;
 import models.MyTableModel;
 import models.PasswordCellRenderer;
-
-import org.jdesktop.swingx.JXButton;
-import org.jdesktop.swingx.JXFrame;
-import org.jdesktop.swingx.JXLabel;
-import org.jdesktop.swingx.JXTable;
-
 import tools.HTMLParser;
 import tools.HTMLWriter;
 import tools.Log;
 import tools.MyJFileChooser;
 
-public class PWForm extends JXFrame implements WindowListener,
-		PropertyChangeListener {
+public class PWForm extends JXFrame implements WindowListener, PropertyChangeListener {
 
 	/**
 	 * 
@@ -82,10 +85,13 @@ public class PWForm extends JXFrame implements WindowListener,
 	private JMenu mnExport;
 	private JPanel panel;
 	private JStatusbar statusbar;
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"dd. MMM yyyy");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd. MMM yyyy");
 	private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 	private JXLabel leftLabel;
+	private JLabel searchLabel;
+	private JTextField searchField;
+	private JPanel searchPanel;
+	private TableRowSorter<MyTableModel> rowSorter;
 
 	// /**
 	// * Create the application.
@@ -127,30 +133,27 @@ public class PWForm extends JXFrame implements WindowListener,
 	private void initialize() {
 		String OS = System.getProperty("os.name").toLowerCase();
 		try {
-			if(OS.contains("mac") || OS.contains("linux")){
+			if (OS.contains("mac") || OS.contains("linux")) {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			}else{
+			} else {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			}
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
 			Log.write(e);
 		}
 		JXFrame.setDefaultLookAndFeelDecorated(true);
 		getFrame().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		getFrame().setIconImage(
-				Toolkit.getDefaultToolkit().getImage(
-						LoginForm.class.getResource("/images/s!logo.png")));
+		getFrame()
+				.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
 		getFrame().setTitle("diversityPWM");
 		getFrame().addWindowListener(this);
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment()
-				.getDefaultScreenDevice();
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
 		int progWidth = screenWidth / 2;
 		int progHeight = screenHeight / 2;
-		getFrame().setBounds(progWidth - (progWidth / 2),
-				progHeight - (progHeight / 2), progWidth, progHeight);
+		getFrame().setBounds(progWidth - (progWidth / 2), progHeight - (progHeight / 2), progWidth, progHeight);
 
 		JMenuBar menuBar = new JMenuBar();
 		getFrame().setJMenuBar(menuBar);
@@ -162,10 +165,8 @@ public class PWForm extends JXFrame implements WindowListener,
 		mntmbeenden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (btnSpeichern.isEnabled()) {
-					if (JOptionPane.showConfirmDialog(getFrame(),
-							"\u00C4nderung speichern?", "Speichern",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
+					if (JOptionPane.showConfirmDialog(getFrame(), "\u00C4nderung speichern?", "Speichern",
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 						onlySave();
 					} else {
 						getFrame().dispose();
@@ -182,15 +183,13 @@ public class PWForm extends JXFrame implements WindowListener,
 		mntmSpeichernUnter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				MyJFileChooser fc = new MyJFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"diversITy Dateien (*.dit)", "dit");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("diversITy Dateien (*.dit)", "dit");
 				fc.setFileFilter(filter);
 				fc.setDialogTitle("Speichern unter");
 				int returnVal = fc.showSaveDialog(getFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					file = fc.getSelectedFile();
-					if (!file.getName().endsWith(".dit")
-							&& !fc.getFileFilter().accept(file)) {
+					if (!file.getName().endsWith(".dit") && !fc.getFileFilter().accept(file)) {
 						if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
 							file = new File(file.getAbsolutePath() + ".dit");
 						}
@@ -209,12 +208,10 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					MyJFileChooser fc = new MyJFileChooser();
-					FileFilter filter = new FileNameExtensionFilter(
-							"HTML Dateien (*.html,*htm)", "htm", "html");
+					FileFilter filter = new FileNameExtensionFilter("HTML Dateien (*.html,*htm)", "htm", "html");
 					fc.setFileFilter(filter);
 					if (fc.showOpenDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
-						HTMLParser parser = new HTMLParser(getFrame(), fc
-								.getSelectedFile());
+						HTMLParser parser = new HTMLParser(getFrame(), fc.getSelectedFile());
 						parser.execute();
 					}
 				} catch (Exception ex) {
@@ -232,20 +229,16 @@ public class PWForm extends JXFrame implements WindowListener,
 				pane.createDialog(getFrame(), "Passwort:").setVisible(true);
 				String ss = pane.getPassword();
 				if ((ss).equals(pass)) {
-					String s = (String) JOptionPane.showInputDialog(getFrame(),
-							"neues Passwort", "Passwort \u00E4ndern",
-							JOptionPane.PLAIN_MESSAGE, null, null, "");
+					String s = (String) JOptionPane.showInputDialog(getFrame(), "neues Passwort",
+							"Passwort \u00E4ndern", JOptionPane.PLAIN_MESSAGE, null, null, "");
 					if (s != null) {
 						if (s.length() >= 6) {
 							pass = s;
-							JOptionPane.showMessageDialog(getFrame(),
-									"Passwort erfolgreich ge\u00E4ndert",
-									"Passwort ge\u00E4ndert",
-									JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(getFrame(), "Passwort erfolgreich ge\u00E4ndert",
+									"Passwort ge\u00E4ndert", JOptionPane.INFORMATION_MESSAGE);
 							saveButtonClicked();
 						} else {
-							JOptionPane.showMessageDialog(getFrame(),
-									"Passwort zu klein", "Passwort Fehler",
+							JOptionPane.showMessageDialog(getFrame(), "Passwort zu klein", "Passwort Fehler",
 									JOptionPane.WARNING_MESSAGE);
 						}
 					}
@@ -261,15 +254,14 @@ public class PWForm extends JXFrame implements WindowListener,
 			public void actionPerformed(ActionEvent arg0) {
 				File eFile = null;
 				MyJFileChooser fc = new MyJFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter(
-						"HTML Dateien (*.html,*htm)", "htm", "html");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("HTML Dateien (*.html,*htm)", "htm",
+						"html");
 				fc.setFileFilter(filter);
 				fc.setDialogTitle("Exportieren ...");
 				int returnVal = fc.showSaveDialog(getFrame());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					eFile = fc.getSelectedFile();
-					if ((!eFile.getName().endsWith(".htm") || !eFile.getName()
-							.endsWith(".html"))
+					if ((!eFile.getName().endsWith(".htm") || !eFile.getName().endsWith(".html"))
 							&& !fc.getFileFilter().accept(eFile)) {
 						if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
 							eFile = new File(eFile.getAbsolutePath() + ".htm");
@@ -294,21 +286,16 @@ public class PWForm extends JXFrame implements WindowListener,
 		JMenuItem mntmCopy = new JMenuItem("Kopieren");
 		mntmCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (table.getSelectedRow() != -1
-						&& table.getSelectedColumn() != -1) {
-					Toolkit.getDefaultToolkit()
-							.getSystemClipboard()
-							.setContents(
-									new StringSelection(table.getStringAt(
-											table.getSelectedRow(),
-											table.getSelectedColumn())), null);
+				if (table.getSelectedRow() != -1 && table.getSelectedColumn() != -1) {
+					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+							new StringSelection(table.getStringAt(table.getSelectedRow(), table.getSelectedColumn())),
+							null);
 				}
 			}
 		});
 		pMenu.add(mntmCopy);
 
-		getFrame().getRootPaneExt().getContentPane()
-				.setLayout(new BorderLayout(0, 0));
+		getFrame().getRootPaneExt().getContentPane().setLayout(new BorderLayout(0, 0));
 
 		statusbar = new JStatusbar();
 		leftLabel = new JXLabel("gestartet");
@@ -324,57 +311,54 @@ public class PWForm extends JXFrame implements WindowListener,
 		statusbar.addRightComponent(timeLabel);
 		setProgressBar(new JProgressBar());
 		getStatusbar().addRightComponent(getProgressBar());
-		getFrame().getRootPaneExt().getContentPane()
-				.add(statusbar, BorderLayout.SOUTH);
+		getFrame().getRootPaneExt().getContentPane().add(statusbar, BorderLayout.SOUTH);
 
 		panel = new JPanel();
 		panel.addComponentListener(new ComponentListener() {
 
+			// Resize the contentPanel
 			@Override
 			public void componentResized(ComponentEvent e) {
-				scrollPane.setBounds(10, 11, getFrame().getWidth() - 36,
-						getFrame().getHeight() - 111
-								- getStatusbar().getHeight());
+				scrollPane.setBounds(10, 51, getFrame().getWidth() - 36,
+						getFrame().getHeight() - 151 - getStatusbar().getHeight());
 				scrollPane.validate();
 				scrollPane.repaint();
-				btnLschen.setBounds(160, getFrame().getHeight() - 89
-						- getStatusbar().getHeight(), 71, 23);
+				btnLschen.setBounds(160, getFrame().getHeight() - 89 - getStatusbar().getHeight(), 71, 23);
 				btnLschen.repaint();
-				btnNeu.setBounds(99, getFrame().getHeight() - 89
-						- getStatusbar().getHeight(), 51, 23);
+				btnNeu.setBounds(99, getFrame().getHeight() - 89 - getStatusbar().getHeight(), 51, 23);
 				btnNeu.repaint();
-				btnSpeichern.setBounds(10, getFrame().getHeight() - 89
-						- getStatusbar().getHeight(), 79, 23);
+				btnSpeichern.setBounds(10, getFrame().getHeight() - 89 - getStatusbar().getHeight(), 79, 23);
 				btnSpeichern.repaint();
-				chckbxPasswrterAnzeigen.setBounds(237, getFrame().getHeight()
-						- 89 - getStatusbar().getHeight(), 131, 23);
+				chckbxPasswrterAnzeigen.setBounds(237, getFrame().getHeight() - 89 - getStatusbar().getHeight(), 131,
+						23);
 				chckbxPasswrterAnzeigen.repaint();
-				chckbxStopEdit.setBounds(370, getFrame().getHeight() - 89
-						- getStatusbar().getHeight(), 131, 23);
+				chckbxStopEdit.setBounds(370, getFrame().getHeight() - 89 - getStatusbar().getHeight(), 131, 23);
 				chckbxStopEdit.repaint();
+
+				searchPanel.setBounds(10, 10, getFrame().getWidth() - 36, 25);
+				searchPanel.repaint();
 			}
 
 			@Override
 			public void componentHidden(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		panel.setLayout(null);
-		getFrame().getRootPaneExt().getContentPane()
-				.add(panel, BorderLayout.CENTER);
+		getFrame().getRootPaneExt().getContentPane().add(panel, BorderLayout.CENTER);
 
 		btnSpeichern = new JXButton();
 		btnSpeichern.addActionListener(new ActionListener() {
@@ -388,18 +372,15 @@ public class PWForm extends JXFrame implements WindowListener,
 		btnSpeichern.setEnabled(false);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, panel.getHeight() - 36,
-				panel.getWidth() - 111);
+		scrollPane.setBounds(10, 40, panel.getHeight() - 36, panel.getWidth() - 151);
 		panel.add(scrollPane);
 		table = new JXTable();
 		tableMouseListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == 3) {
-					table.changeSelection(
-							table.rowAtPoint(new Point(e.getX(), e.getY())),
-							table.columnAtPoint(new Point(e.getX(), e.getY())),
-							false, false);
+					table.changeSelection(table.rowAtPoint(new Point(e.getX(), e.getY())),
+							table.columnAtPoint(new Point(e.getX(), e.getY())), false, false);
 					// System.out.println(Arrays.toString(pMenu.getKeyListeners()));
 					pMenu.show(table, e.getX(), e.getY());
 				}
@@ -408,12 +389,10 @@ public class PWForm extends JXFrame implements WindowListener,
 		table.addMouseListener(tableMouseListener);
 		table.putClientProperty("terminateEditOnFocusLost", true);
 		table.setCellSelectionEnabled(true);
-		model = new MyTableModel(new Object[][] {}, new String[] { "Location",
-				"User", "Password" });
+		model = new MyTableModel(new Object[][] {}, new String[] { "Ort", "Benutzer", "Passwort" });
 		table.setModel(model);
 		table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
-		table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
-				"remove row");
+		table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "remove row");
 		table.getActionMap().put("remove row", new AbstractAction() {
 
 			/**
@@ -423,13 +402,11 @@ public class PWForm extends JXFrame implements WindowListener,
 
 			public void actionPerformed(ActionEvent e) {
 				if (table.getSelectedRows().length > 0) {
-					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
+					if (JOptionPane.showConfirmDialog(getFrame(), "Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
-							model.removeRow(table
-									.convertRowIndexToModel(rows[i] - i));
+							model.removeRow(table.convertRowIndexToModel(rows[i] - i));
 						}
 					}
 				}
@@ -443,9 +420,8 @@ public class PWForm extends JXFrame implements WindowListener,
 		btnNeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				model.addRow(new Object[] { "", "", "" });
-				table.changeSelection(table.getRowSorter()
-						.convertRowIndexToView(model.getRowCount() - 1), 0,
-						false, false);
+				table.changeSelection(table.getRowSorter().convertRowIndexToView(model.getRowCount() - 1), 0, false,
+						false);
 				table.requestFocus();
 			}
 		});
@@ -457,13 +433,11 @@ public class PWForm extends JXFrame implements WindowListener,
 		btnLschen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (table.getSelectedRows().length > 0) {
-					if (JOptionPane.showConfirmDialog(getFrame(),
-							"Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
+					if (JOptionPane.showConfirmDialog(getFrame(), "Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 						int[] rows = table.getSelectedRows();
 						for (int i = 0; i < rows.length; i++) {
-							model.removeRow(table
-									.convertRowIndexToModel(rows[i] - i));
+							model.removeRow(table.convertRowIndexToModel(rows[i] - i));
 						}
 					}
 				}
@@ -484,15 +458,13 @@ public class PWForm extends JXFrame implements WindowListener,
 					pane.createDialog(getFrame(), "Passwort:").setVisible(true);
 					String ss = pane.getPassword();
 					if ((ss).equals(pass)) {
-						table.setDefaultRenderer(Object.class,
-								new DefaultTableCellRenderer());
+						table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
 						scrollPane.repaint();
 					} else {
 						chckbxPasswrterAnzeigen.setSelected(false);
 					}
 				} else {
-					table.setDefaultRenderer(Object.class,
-							new PasswordCellRenderer());
+					table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
 					scrollPane.repaint();
 				}
 			}
@@ -531,6 +503,47 @@ public class PWForm extends JXFrame implements WindowListener,
 		chckbxStopEdit.setBounds(370, panel.getHeight() - 89, 131, 23);
 		panel.add(chckbxStopEdit);
 
+		searchPanel = new JPanel(new BorderLayout());
+		searchPanel.setBounds(10, 10, getFrame().getWidth() - 36, 25);
+		searchLabel = new JLabel("Suche: ");
+		searchPanel.add(searchLabel, BorderLayout.WEST);
+		searchField = new JTextField();
+		searchPanel.add(searchField, BorderLayout.CENTER);
+		panel.add(searchPanel);
+
+		// TableSorter for Search
+		rowSorter = new TableRowSorter<MyTableModel>((MyTableModel) table.getModel());
+		table.setRowSorter(rowSorter);
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				String text = searchField.getText();
+
+				if (text.trim().length() == 0) {
+					rowSorter.setRowFilter(null);
+				} else {
+					rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+				}
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				String text = searchField.getText();
+
+				if (text.trim().length() == 0) {
+					rowSorter.setRowFilter(null);
+				} else {
+					rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+				}
+
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				 throw new UnsupportedOperationException("Not supported yet.");
+			}
+		});
 	}
 
 	protected void saveButtonClicked() {
@@ -578,8 +591,7 @@ public class PWForm extends JXFrame implements WindowListener,
 			table.getCellEditor().stopCellEditing();
 		}
 		if (btnSpeichern.isEnabled()) {
-			if (JOptionPane.showConfirmDialog(getFrame(),
-					"\u00C4nderung speichern?", "Speichern",
+			if (JOptionPane.showConfirmDialog(getFrame(), "\u00C4nderung speichern?", "Speichern",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION) {
 				onlySave();
 			} else {
@@ -615,18 +627,14 @@ public class PWForm extends JXFrame implements WindowListener,
 
 	}
 
-
-
 	/**
 	 * 
 	 * 
-	 *	/~_ _ _|__|_ _  _   _  _  _|  (~ _ _|__|_ _  _
-	 *	\_/(/_ |  | (/_|   (_|| |(_|  _)(/_ |  | (/_| 
+	 * /~_ _ _|__|_ _ _ _ _ _| (~ _ _|__|_ _ _ \_/(/_ | | (/_| (_|| |(_| _)(/_ |
+	 * | (/_|
 	 * 
 	 * 
 	 */
-	
-	
 
 	/**
 	 * @return the frame
