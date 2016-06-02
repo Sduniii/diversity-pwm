@@ -11,7 +11,7 @@ public class MyJPasswordPane extends JOptionPane {
 
 	public MyJPasswordPane() {
 		super();
-		passwordField = new JPasswordField(20);
+		passwordField = new JPasswordField(30);
 		JPanel panel = new JPanel();
         panel.add(passwordField);
         this.setMessage(panel);

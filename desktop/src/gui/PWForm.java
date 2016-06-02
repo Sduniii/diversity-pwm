@@ -48,6 +48,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 import org.jdesktop.swingx.JXButton;
@@ -58,6 +59,7 @@ import org.jdesktop.swingx.JXTable;
 import models.Core;
 import models.Core.Mode;
 import models.JStatusbar;
+import models.MyCellEditor;
 import models.MyJPasswordPane;
 import models.MyTableModel;
 import models.PasswordCellRenderer;
@@ -155,6 +157,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		int progHeight = screenHeight / 2;
 		getFrame().setBounds(progWidth - (progWidth / 2), progHeight - (progHeight / 2), progWidth, progHeight);
 
+		// MENU
 		JMenuBar menuBar = new JMenuBar();
 		getFrame().setJMenuBar(menuBar);
 
@@ -282,6 +285,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		mnDatei.add(mntmPasswortndern);
 		mnDatei.add(mntmbeenden);
 
+		// RIGHTCLICK MENU
 		JPopupMenu pMenu = new JPopupMenu();
 		JMenuItem mntmCopy = new JMenuItem("Kopieren");
 		mntmCopy.addActionListener(new ActionListener() {
@@ -297,6 +301,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 
 		getFrame().getRootPaneExt().getContentPane().setLayout(new BorderLayout(0, 0));
 
+		// STATUSBAR
 		statusbar = new JStatusbar();
 		leftLabel = new JXLabel("gestartet");
 		setLblForText(leftLabel);
@@ -360,6 +365,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		panel.setLayout(null);
 		getFrame().getRootPaneExt().getContentPane().add(panel, BorderLayout.CENTER);
 
+		// BUTTONS
 		btnSpeichern = new JXButton();
 		btnSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -370,51 +376,6 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		panel.add(btnSpeichern);
 		btnSpeichern.setText("Speichern");
 		btnSpeichern.setEnabled(false);
-
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 40, panel.getHeight() - 36, panel.getWidth() - 151);
-		panel.add(scrollPane);
-		table = new JXTable();
-		tableMouseListener = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == 3) {
-					table.changeSelection(table.rowAtPoint(new Point(e.getX(), e.getY())),
-							table.columnAtPoint(new Point(e.getX(), e.getY())), false, false);
-					// System.out.println(Arrays.toString(pMenu.getKeyListeners()));
-					pMenu.show(table, e.getX(), e.getY());
-				}
-			}
-		};
-		table.addMouseListener(tableMouseListener);
-		table.putClientProperty("terminateEditOnFocusLost", true);
-		table.setCellSelectionEnabled(true);
-		model = new MyTableModel(new Object[][] {}, new String[] { "Ort", "Benutzer", "Passwort" });
-		table.setModel(model);
-		table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
-		table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "remove row");
-		table.getActionMap().put("remove row", new AbstractAction() {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e) {
-				if (table.getSelectedRows().length > 0) {
-					if (JOptionPane.showConfirmDialog(getFrame(), "Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
-							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-						int[] rows = table.getSelectedRows();
-						for (int i = 0; i < rows.length; i++) {
-							model.removeRow(table.convertRowIndexToModel(rows[i] - i));
-						}
-					}
-				}
-
-			}
-
-		});
-		scrollPane.setViewportView(table);
 
 		btnNeu = new JXButton();
 		btnNeu.addActionListener(new ActionListener() {
@@ -447,6 +408,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		btnLschen.setBounds(160, panel.getHeight() - 89, 71, 23);
 		panel.add(btnLschen);
 
+		// CECKBOXES
 		chckbxPasswrterAnzeigen = new JCheckBox("Passw\u00F6rter anzeigen?");
 
 		chckbxPasswrterAnzeigen.addActionListener(new ActionListener() {
@@ -503,6 +465,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		chckbxStopEdit.setBounds(370, panel.getHeight() - 89, 131, 23);
 		panel.add(chckbxStopEdit);
 
+		// SEARCHPANEL
 		searchPanel = new JPanel(new BorderLayout());
 		searchPanel.setBounds(10, 10, getFrame().getWidth() - 36, 25);
 		searchLabel = new JLabel("Suche: ");
@@ -510,6 +473,58 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 		searchField = new JTextField();
 		searchPanel.add(searchField, BorderLayout.CENTER);
 		panel.add(searchPanel);
+
+		// TABLE
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 40, panel.getHeight() - 36, panel.getWidth() - 151);
+		panel.add(scrollPane);
+
+		table = new JXTable();
+		tableMouseListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == 3) {
+					table.changeSelection(table.rowAtPoint(new Point(e.getX(), e.getY())),
+							table.columnAtPoint(new Point(e.getX(), e.getY())), false, false);
+					// System.out.println(Arrays.toString(pMenu.getKeyListeners()));
+					pMenu.show(table, e.getX(), e.getY());
+				}
+			}
+		};
+		table.addMouseListener(tableMouseListener);
+		table.putClientProperty("terminateEditOnFocusLost", true);
+		table.setRowSelectionAllowed(true);
+		model = new MyTableModel(new Object[][] {}, new String[] { "Ort", "Benutzer", "Passwort" });
+		table.setModel(model);
+		table.setDefaultRenderer(Object.class, new PasswordCellRenderer());
+		table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "remove row");
+		table.getActionMap().put("remove row", new AbstractAction() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRows().length > 0) {
+					if (JOptionPane.showConfirmDialog(getFrame(), "Passw\u00F6rter l\u00F6schen?", "L\u00F6schen",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+						int[] rows = table.getSelectedRows();
+						for (int i = 0; i < rows.length; i++) {
+							model.removeRow(table.convertRowIndexToModel(rows[i] - i));
+						}
+					}
+				}
+
+			}
+
+		});				
+	    TableColumn column = table.getColumnModel().getColumn(0);
+	    column.setCellEditor(new MyCellEditor());
+	    TableColumn columnt = table.getColumnModel().getColumn(1);
+	    columnt.setCellEditor(new MyCellEditor());
+		
+		scrollPane.setViewportView(table);
 
 		// TableSorter for Search
 		rowSorter = new TableRowSorter<MyTableModel>((MyTableModel) table.getModel());
@@ -541,7 +556,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
-				 throw new UnsupportedOperationException("Not supported yet.");
+				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		});
 	}
