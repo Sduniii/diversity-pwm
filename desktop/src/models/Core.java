@@ -1,12 +1,5 @@
 package models;
 
-import gui.PWForm;
-import gui.SplashScreen;
-import huffman.BinaryTree;
-import huffman.Heap;
-import huffman.HuffmanToken;
-import huffman.HuffmanTree;
-
 import java.awt.Cursor;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -18,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.CopyOption;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -33,12 +25,18 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXLabel;
 
+import BitIO.BitInputFile;
+import BitIO.BitOutputFile;
+import gui.PWForm;
+import gui.SplashScreen;
+import huffman.BinaryTree;
+import huffman.Heap;
+import huffman.HuffmanToken;
+import huffman.HuffmanTree;
 import tools.AES;
 import tools.Log;
 import tools.SHA;
 import tools.SHA.TypeToGiveBack;
-import BitIO.BitInputFile;
-import BitIO.BitOutputFile;
 
 public class Core extends SwingWorker<Void, Void> {
 
