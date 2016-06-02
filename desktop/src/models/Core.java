@@ -81,7 +81,6 @@ public class Core extends SwingWorker<Void, Void> {
 
 	@Override
 	public Void doInBackground() {
-		Boolean success = false;
 		// System.out.println(mode == Mode.LOAD);
 		if (sScreen != null) {
 			sScreen.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -152,6 +151,7 @@ public class Core extends SwingWorker<Void, Void> {
 				tempFile.delete();
 				// System.out.println(allDecrypt.size());
 			} else if (mode == Mode.SAVE) {
+				Boolean success = false;
 				while (!success) {
 					int progress = 0;
 					setProgress(0);
