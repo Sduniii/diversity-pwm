@@ -18,6 +18,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -54,8 +58,7 @@ public class Core extends SwingWorker<Void, Void> {
 	private SplashScreen sScreen;
 	private PWForm pScreen;
 
-	public Core(File file, JXLabel lblJxLabel, Mode mode, String pass,
-			SplashScreen propertyChangeListener) {
+	public Core(File file, JXLabel lblJxLabel, Mode mode, String pass, SplashScreen propertyChangeListener) {
 		this.file = file;
 		this.lblForText = lblJxLabel;
 		this.mode = mode;
@@ -65,8 +68,7 @@ public class Core extends SwingWorker<Void, Void> {
 		this.sScreen = propertyChangeListener;
 	}
 
-	public Core(File file, JXLabel lblJxLabel, Mode mode, String pass,
-			PWForm propertyChangeListener) {
+	public Core(File file, JXLabel lblJxLabel, Mode mode, String pass, PWForm propertyChangeListener) {
 		this.file = file;
 		this.lblForText = lblJxLabel;
 		this.mode = mode;
@@ -74,30 +76,25 @@ public class Core extends SwingWorker<Void, Void> {
 		this.allDecrypt = new LinkedList<String>();
 		this.addPropertyChangeListener(propertyChangeListener);
 		this.pScreen = propertyChangeListener;
-		//this.pScreen.getStatusbar().addRightComponent(this.pScreen.getProgressBar());
+		// this.pScreen.getStatusbar().addRightComponent(this.pScreen.getProgressBar());
 	}
 
 	@Override
 	public Void doInBackground() {
+		Boolean success = false;
 		// System.out.println(mode == Mode.LOAD);
-		if(sScreen != null){
+		if (sScreen != null) {
 			sScreen.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			sScreen.setEnabled(false);
-		}else if(pScreen != null){
+		} else if (pScreen != null) {
 			pScreen.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			pScreen.setEnabled(false);
 		}
 		try {
 			if (mode == Mode.LOAD) {
-				boolean withCompress = true;
 				File tempFile;
-				if (withCompress) {
-					tempFile = new File(file.getAbsolutePath() + "tmp");
-					decompressFile(file.getAbsolutePath(),
-							file.getAbsolutePath() + "tmp");
-				} else {
-					tempFile = file;
-				}
+				tempFile = new File(file.getAbsolutePath() + ".tmp");
+				decompressFile(file.getAbsolutePath(), file.getAbsolutePath() + ".tmp");
 				long progress = 0;
 				setProgress(0);
 				lblForText.setText("lese...");
@@ -106,20 +103,16 @@ public class Core extends SwingWorker<Void, Void> {
 				// System.out.println(br.readLine());
 				fullProgress -= br.readLine().length();
 				progress++;
-				setProgress(Math
-						.min((int) (progress * 100 / fullProgress), 100));
-				lblForText.setText("lese... " + Integer.toString(getProgress())
-						+ "%");
+				setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+				lblForText.setText("lese... " + Integer.toString(getProgress()) + "%");
 				int ch;
 				String temp = "";
 				while ((ch = br.read()) != -1) {
 					// if(temp == "") System.out.println((char)ch);
 					temp += (char) ch;
 					progress++;
-					setProgress(Math.min((int) (progress * 100 / fullProgress),
-							99));
-					lblForText.setText("lese... "
-							+ Integer.toString(getProgress()) + "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress), 99));
+					lblForText.setText("lese... " + Integer.toString(getProgress()) + "%");
 					// if(progress == fullProgress)
 					// System.out.println((char)ch);
 				}
@@ -137,7 +130,7 @@ public class Core extends SwingWorker<Void, Void> {
 					if (temp.charAt(i) == '|') {
 						// System.out.println(temp2);
 						if (this.pScreen != null) {
-							
+
 						} else {
 							allDecrypt.add(AES.decode(pass, temp2));
 						}
@@ -152,59 +145,62 @@ public class Core extends SwingWorker<Void, Void> {
 							allDecrypt.add(AES.decode(pass, temp2));
 						}
 					progress++;
-					setProgress(Math.min((int) (progress * 100 / fullProgress),
-							100));
-					lblForText.setText("entschlüssele... "
-							+ Integer.toString(getProgress()) + "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+					lblForText.setText("entschlüssele... " + Integer.toString(getProgress()) + "%");
 				}
 				// System.out.println("end");
-				if (withCompress)
-					tempFile.delete();
-				// System.out.println(allDecrypt.size());
-				return null;
-			} else {
-				int progress = 0;
-				setProgress(0);
-				File tempFile = new File(file.getAbsolutePath() + "tmp");
-				int fullProgress = toSave.size();
-				BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile,
-						false));
-				String sss = (String) SHA.getHash(pass, "Sha-512",
-						TypeToGiveBack.HEXSTRING);
-				sss = (String) SHA.getHash(sss, "Sha-512",
-						TypeToGiveBack.HEXSTRING);
-				bw.write(new String(Base64.getUrlEncoder().encode(
-						sss.getBytes())));
-				bw.newLine();
-				Iterator<String> it = toSave.iterator();
-				String temp = "";
-				lblForText.setText("speichere...");
-				while (it.hasNext()) {
-					progress++;
-					setProgress(Math.min((int) (progress * 100 / fullProgress),
-							100));
-					lblForText.setText("speichere... "
-							+ Integer.toString(getProgress()) + "%");
-					String t = it.next();
-					if (it.hasNext())
-						temp += AES.encode(pass, t) + "|";
-					else
-						temp += AES.encode(pass, t);
-				}
-				// System.out.println(temp.split("\\|").length);
-				progress++;
-				bw.write(AES.encode(pass, temp));
-				bw.close();
-				setProgress(Math
-						.min((int) (progress * 100 / fullProgress), 100));
-				lblForText.setText("speichere... "
-						+ Integer.toString(getProgress()) + "%");
-				startCompress(tempFile.getAbsolutePath(),
-						file.getAbsolutePath(), new String(Base64
-								.getUrlEncoder().encode(sss.getBytes())));
 				tempFile.delete();
+				// System.out.println(allDecrypt.size());
+			} else if (mode == Mode.SAVE) {
+				while (!success) {
+					int progress = 0;
+					setProgress(0);
+					// System.out.println(FileSystems.getDefault().getPath(file.getAbsolutePath()+".bak",""));
+					Files.copy(FileSystems.getDefault().getPath(file.getAbsolutePath(), ""),
+							FileSystems.getDefault().getPath(file.getAbsolutePath() + ".bak", ""),
+							StandardCopyOption.REPLACE_EXISTING);
+					File tempFile = new File(file.getAbsolutePath() + ".tmp");
+					int fullProgress = toSave.size();
+					BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile, false));
+					String sss = (String) SHA.getHash(pass, "Sha-512", TypeToGiveBack.HEXSTRING);
+					sss = (String) SHA.getHash(sss, "Sha-512", TypeToGiveBack.HEXSTRING);
+					bw.write(new String(Base64.getUrlEncoder().encode(sss.getBytes())));
+					bw.newLine();
+					Iterator<String> it = toSave.iterator();
+					String temp = "";
+					lblForText.setText("speichere...");
+					while (it.hasNext()) {
+						progress++;
+						setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+						lblForText.setText("speichere... " + Integer.toString(getProgress()) + "%");
+						String t = it.next();
+						if (it.hasNext())
+							temp += AES.encode(pass, t) + "|";
+						else
+							temp += AES.encode(pass, t);
+					}
+					// System.out.println(temp.split("\\|").length);
+					progress++;
+					bw.write(AES.encode(pass, temp));
+					bw.close();
+					setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+					lblForText.setText("speichere... " + Integer.toString(getProgress()) + "%");
+					startCompress(tempFile.getAbsolutePath(), file.getAbsolutePath(),
+							new String(Base64.getUrlEncoder().encode(sss.getBytes())));
+					tempFile.delete();
+					if (!file.exists()) {
+						Files.copy(FileSystems.getDefault().getPath(file.getAbsolutePath() + ".bak", ""),
+								FileSystems.getDefault().getPath(file.getAbsolutePath(), ""),
+								StandardCopyOption.REPLACE_EXISTING);
+					} else {
+						success = true;
+						Files.copy(FileSystems.getDefault().getPath(file.getAbsolutePath(), ""),
+								FileSystems.getDefault().getPath(file.getAbsolutePath() + ".bak", ""),
+								StandardCopyOption.REPLACE_EXISTING);
+					}
+				}
 			}
-			
+
 			return null;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -238,8 +234,7 @@ public class Core extends SwingWorker<Void, Void> {
 			bis = new BufferedInputStream(new FileInputStream(sourceFile));
 			int fullProgress = (int) (new File(sourceFile)).length();
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("komprimiere: erstelle Bibliothek... "
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("komprimiere: erstelle Bibliothek... " + Integer.toString(getProgress()) + "%");
 			int byteRead = bis.read();
 			while (byteRead > -1 && byteRead < 256) { // bytes aus Datei
 														// lesen
@@ -259,8 +254,7 @@ public class Core extends SwingWorker<Void, Void> {
 					boolean found = false;
 					for (int i = 0; i < dictionary.size(); i++) {
 						if (dictionary.get(i).getC() == byteRead) {
-							dictionary.get(i).setFreq(
-									dictionary.get(i).getFreq() + 1);
+							dictionary.get(i).setFreq(dictionary.get(i).getFreq() + 1);
 							found = true;
 						}
 					}
@@ -269,16 +263,14 @@ public class Core extends SwingWorker<Void, Void> {
 					}
 				}
 				progress++;
-				setProgress(Math
-						.min((int) (progress * 100 / fullProgress), 100));
-				lblForText.setText("komprimiere: erstelle Bibliothek... "
-						+ Integer.toString(getProgress()) + "%");
+				setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+				lblForText.setText("komprimiere: erstelle Bibliothek... " + Integer.toString(getProgress()) + "%");
 				byteRead = bis.read();
 			}
 			bis.close();
-			//System.out.println("Datei erfolgreich eingelesen!");
+			// System.out.println("Datei erfolgreich eingelesen!");
 		} catch (IOException e) {
-			//System.err.println("Die Datei wurde nicht gefunden!");
+			// System.err.println("Die Datei wurde nicht gefunden!");
 			Log.write(e);
 		}
 		return dictionary;
@@ -300,16 +292,14 @@ public class Core extends SwingWorker<Void, Void> {
 
 		int heapSize = 0;
 		// einen Heap erstellen der HuffmanTrees beinhaltet
-		Heap<HuffmanTree> huffmanHeap = new Heap<HuffmanTree>(new HuffmanTree(
-				dictionary.get(0)));
+		Heap<HuffmanTree> huffmanHeap = new Heap<HuffmanTree>(new HuffmanTree(dictionary.get(0)));
 		heapSize++;
 
 		/** Progress **/
 		progress++;
 		int fullProgress = dictionary.size() * 2;
 		setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-		lblForText.setText("komprimiere: erstelle Baum..."
-				+ Integer.toString(getProgress()) + "%");
+		lblForText.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress()) + "%");
 		/** Progress END **/
 
 		if (dictionary.size() == 1) { // der Sonderfall, dass eine Datei nur
@@ -334,8 +324,7 @@ public class Core extends SwingWorker<Void, Void> {
 			/** Progress **/
 			progress++;
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("komprimiere: erstelle Baum..."
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 
 		}
@@ -352,8 +341,7 @@ public class Core extends SwingWorker<Void, Void> {
 			HuffmanTree lowest2_freq = huffmanHeap.extractMin();
 			heapSize--;
 
-			HuffmanTree concatHuffman = HuffmanTree.concatTwoHuffmanTrees(
-					lowest_freq, lowest2_freq);
+			HuffmanTree concatHuffman = HuffmanTree.concatTwoHuffmanTrees(lowest_freq, lowest2_freq);
 			phase++;
 			if (phase == heapsizeBefore - 1) { // nach n-1 Phasen ist
 												// Schluss
@@ -366,14 +354,13 @@ public class Core extends SwingWorker<Void, Void> {
 			/** Progress **/
 			progress++;
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("komprimiere: erstelle Baum..."
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("komprimiere: erstelle Baum..." + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 		}
 		Heap<HuffmanTree> Huffman = new Heap<HuffmanTree>(finalHuffman);
 
 		if (huffmanHeap.getSize() == 1) {
-			//System.out.println("HuffmanTree erfolgreich aufgebaut!");
+			// System.out.println("HuffmanTree erfolgreich aufgebaut!");
 		} else
 			Log.write(new Exception("Heap hat nicht korrekte Groesse"));
 
@@ -396,8 +383,7 @@ public class Core extends SwingWorker<Void, Void> {
 	 *            is the huffmantree that is used for compression
 	 * @param sss
 	 */
-	private void compressFile(String sourcefile, String targetfile,
-			HuffmanTree huffmanTree, String sss) {
+	private void compressFile(String sourcefile, String targetfile, HuffmanTree huffmanTree, String sss) {
 		/** Progress **/
 		lblForText.setText("komprimiere...");
 		int progress = 0;
@@ -442,11 +428,9 @@ public class Core extends SwingWorker<Void, Void> {
 		try {
 			/** Progress **/
 			progress++;
-			int fullProgress = (int) (1 + charValues.size() + new File(
-					sourcefile).length());
+			int fullProgress = (int) (1 + charValues.size() + new File(sourcefile).length());
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("komprimiere... "
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("komprimiere... " + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 
 			/** Signatur */
@@ -486,8 +470,7 @@ public class Core extends SwingWorker<Void, Void> {
 			/** Progress **/
 			progress++;
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("komprimiere... "
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("komprimiere... " + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 
 			/**
@@ -509,10 +492,8 @@ public class Core extends SwingWorker<Void, Void> {
 					}
 					/** Progress **/
 					progress++;
-					setProgress(Math.min((int) (progress * 100 / fullProgress),
-							100));
-					lblForText.setText("komprimiere... "
-							+ Integer.toString(getProgress()) + "%");
+					setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+					lblForText.setText("komprimiere... " + Integer.toString(getProgress()) + "%");
 					/** Progress END **/
 				}
 				bof.endBitMode(); // Codeword ist zuende
@@ -545,10 +526,8 @@ public class Core extends SwingWorker<Void, Void> {
 				}
 				/** Progress **/
 				progress++;
-				setProgress(Math
-						.min((int) (progress * 100 / fullProgress), 100));
-				lblForText.setText("komprimiere... "
-						+ Integer.toString(getProgress()) + "%");
+				setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+				lblForText.setText("komprimiere... " + Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 
 				byteRead = bis.read();
@@ -585,8 +564,7 @@ public class Core extends SwingWorker<Void, Void> {
 	 */
 	public void rebuildTree(HuffmanTree decompTree) {
 		for (int i = 0; i < decompTree.codeWords.size(); i++) {
-			decompTree.constructWayToLeaf(decompTree.codeWords.get(i),
-					decompTree.chars.get(i));
+			decompTree.constructWayToLeaf(decompTree.codeWords.get(i), decompTree.chars.get(i));
 		}
 	}
 
@@ -608,8 +586,7 @@ public class Core extends SwingWorker<Void, Void> {
 			progress++;
 			int fullProgress = (int) new File(sourceFile).length() * 8;
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("dekomprimiere... "
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("dekomprimiere... " + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 			int breaks = 0;
 			int b = bif.readByte();
@@ -659,7 +636,8 @@ public class Core extends SwingWorker<Void, Void> {
 				codeword = ""; // codewort-string wieder leeren
 				bif.endBitMode();
 				if (c == highestChar) {
-					// System.out.println("--- Hier endet die Codetabelle. ---");
+					// System.out.println("--- Hier endet die Codetabelle.
+					// ---");
 					bif.beginBitMode();
 					break;
 				}
@@ -668,8 +646,7 @@ public class Core extends SwingWorker<Void, Void> {
 			/** Progress **/
 			progress += blabla;
 			setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
-			lblForText.setText("dekomprimiere... "
-					+ Integer.toString(getProgress()) + "%");
+			lblForText.setText("dekomprimiere... " + Integer.toString(getProgress()) + "%");
 			/** Progress END **/
 
 			rebuildTree(decompTree); // Huffmanbaum rekonstruieren
@@ -677,8 +654,7 @@ public class Core extends SwingWorker<Void, Void> {
 			// + decompTree.toString());
 			// ab jetzt die Bitfolgen lesen und im baum ablaufen bis man in
 			// einem blatt gelandet ist.
-			BufferedOutputStream bos = new BufferedOutputStream(
-					new FileOutputStream(targetFile));
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(targetFile));
 			// System.ot.println("bos erstellt.");
 			/** ab hier muss noch bearbeitet werden */
 
@@ -718,10 +694,8 @@ public class Core extends SwingWorker<Void, Void> {
 
 				/** Progress **/
 				progress++;
-				setProgress(Math
-						.min((int) (progress * 100 / fullProgress), 100));
-				lblForText.setText("dekomprimiere... "
-						+ Integer.toString(getProgress()) + "%");
+				setProgress(Math.min((int) (progress * 100 / fullProgress), 100));
+				lblForText.setText("dekomprimiere... " + Integer.toString(getProgress()) + "%");
 				/** Progress END **/
 
 			}
@@ -732,11 +706,8 @@ public class Core extends SwingWorker<Void, Void> {
 			bos.close();
 
 		} catch (IOException e) {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							"<html><font size='2'>Datei kann nicht gelesen werden!</font></html>",
-							"Fehler", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "<html><font size='2'>Datei kann nicht gelesen werden!</font></html>",
+					"Fehler", JOptionPane.ERROR_MESSAGE);
 			Log.write(e);
 		}
 	}
@@ -821,14 +792,14 @@ public class Core extends SwingWorker<Void, Void> {
 	 */
 	@Override
 	public void done() {
-		if(this.pScreen != null && mode == Mode.SAVE){
+		if (this.pScreen != null && mode == Mode.SAVE) {
 			setProgress(0);
 			getLblForText().setText("fertig");
 			pScreen.setEnabled(true);
 			pScreen.setCursor(null);
-		}else if(this.pScreen != null && mode == Mode.CLOSESAVE){
+		} else if (this.pScreen != null && mode == Mode.CLOSESAVE) {
 			this.pScreen.dispose();
-		}else if (this.sScreen != null && mode == Mode.LOAD) {
+		} else if (this.sScreen != null && mode == Mode.LOAD) {
 			sScreen.setCursor(null);
 			sScreen.dispose();
 			new PWForm(getAllDecrypt(), getPass(), getFile());
