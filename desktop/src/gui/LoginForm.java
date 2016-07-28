@@ -91,7 +91,7 @@ public class LoginForm {
         }
         JXFrame.setDefaultLookAndFeelDecorated(true);
         String pfad = "...";
-        String sPa = new String("");
+        String sPa = "";
         if (getOptionFile().exists()) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(getOptionFile()));
@@ -220,7 +220,7 @@ public class LoginForm {
 
         setChckbxPasswortSpeichern(new JCheckBox("Passwort merken?"));
         getChckbxPasswortSpeichern().setBounds(10, 208, 123, 23);
-        if (sPa != "")
+        if (sPa != null && !sPa.equals(""))
             getChckbxPasswortSpeichern().setSelected(true);
         getFrame().getRootPaneExt().getContentPane().add(getChckbxPasswortSpeichern());
 
@@ -228,7 +228,6 @@ public class LoginForm {
         getChckbxDateipfadMerken().setSelected(true);
         getChckbxDateipfadMerken().setBounds(10, 182, 123, 23);
         getFrame().getRootPaneExt().getContentPane().add(getChckbxDateipfadMerken());
-        System.gc();
     }
 
     /**
