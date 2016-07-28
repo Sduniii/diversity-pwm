@@ -1,45 +1,86 @@
 package models;
 
-import java.awt.Component;
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
+
+import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTable;
-
-import org.jdesktop.swingx.JXComboBox;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 @SuppressWarnings("serial")
-public class MyCellEditor extends DefaultCellEditor {
+public class MyCellEditor extends AbstractCellEditor implements TableCellEditor {
 
+    private JComboBox<String> field;
+    private AutoCompleteSupport<Object> acs;
 
-	public MyCellEditor() {
-		super(new JXComboBox());
-	}
+    public MyCellEditor() {
+        field = new JComboBox<>();
+        field.addFocusListener(new FocusHandler());
+        field.getEditor().addActionListener(e -> fireEditingStopped());
+    }
 
-	@Override
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		//JXComboBox field = (JXComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        //JXComboBox field = (JXComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+        Object[] suggestions = this.getSuggestions(table, column, value);
+        if (acs == null || !acs.isInstalled()) {
+            acs = AutoCompleteSupport.install(field, GlazedLists.eventListOf(suggestions));
+        } else {
+            acs.uninstall();
+            acs = AutoCompleteSupport.install(field, GlazedLists.eventListOf(suggestions));
+        }
 
-		List<String> suggestions = this.getSuggestions(table, column, value);
-		JXComboBox field = new JXComboBox(suggestions.toArray());
-		field.setEditable(true);
+        field.setEditable(true);
+        field.setSelectedItem(value);
 
-		if (column == 0 || column == 1) {
-			AutoCompleteDecorator.decorate(field);
-		}
+        field.requestFocus();
+        return field;
+    }
 
-		return field;
-	}
+    private Object[] getSuggestions(JTable table, int column, Object value) {
+        ArrayList<String> list = new ArrayList<>();
+        if (value != null) {
+            for (int i = table.getRowCount() - 1; i > -1; i--) {
+                //System.out.println(table.getValueAt(i, column));
+                if (!value.toString().equals(table.getValueAt(i, column)) && !list.contains(table.getValueAt(i, column)))
+                    list.add(table.getValueAt(i, column).toString());
+            }
+        }
+        return list.toArray();
+    }
 
-	private List<String> getSuggestions(JTable table, int column, Object value) {
-		ArrayList<String> list = new ArrayList<String>();
-		for(int i = table.getRowCount()-1; i > -1; i--){
-			System.out.println(table.getValueAt(i, column));
-			if(!value.toString().equals(table.getValueAt(i, column)) && !list.contains(table.getValueAt(i, column)))
-					list.add(table.getValueAt(i, column).toString());
-		}
-		return list;
-	}
+    @Override
+    public Object getCellEditorValue() {
+        if (field.getEditor().getEditorComponent() instanceof JTextField)
+            return ((JTextField) field.getEditor().getEditorComponent()).getText();
+        else
+            return "";
+    }
+
+    public static class FocusHandler extends FocusAdapter {
+        public void focusGained(FocusEvent evt) {
+            JComboBox cb = (JComboBox) evt.getSource();
+            if (cb.isEditable()) {
+                Component editor = cb.getEditor().getEditorComponent();
+                if (editor != null) {
+                    editor.requestFocus();
+                }
+            }
+        }
+    }
+
+    public JTextField getEditorField() {
+        if (field.getEditor() != null && field.getEditor().getEditorComponent() instanceof JTextField) {
+            return (JTextField) field.getEditor().getEditorComponent();
+        } else {
+            return null;
+        }
+    }
 }

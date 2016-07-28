@@ -790,8 +790,9 @@ public class Core extends SwingWorker<Void, Void> {
 	 */
 	@Override
 	public void done() {
-		if (this.pScreen != null && mode == Mode.SAVE) {
-			setProgress(0);
+        System.gc();
+        if (this.pScreen != null && mode == Mode.SAVE) {
+            setProgress(0);
 			getLblForText().setText("fertig");
 			pScreen.setEnabled(true);
 			pScreen.setCursor(null);
@@ -815,6 +816,7 @@ public class Core extends SwingWorker<Void, Void> {
 			pScreen.setCursor(null);
 			pScreen.setEnabled(true);
 		}
-	}
+        System.gc();
+    }
 
 }

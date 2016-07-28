@@ -9,11 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 
 import models.Core;
 
@@ -21,6 +17,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 
 import tools.Log;
+import tools.OS;
 
 public class SplashScreen extends JXFrame implements PropertyChangeListener, WindowListener{
 
@@ -55,19 +52,9 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		String OS = System.getProperty("os.name").toLowerCase();
-		try {
-			if(OS.contains("mac") || OS.contains("linux")){
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			}else{
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			}
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			Log.write(e);
-		}
-		JXFrame.setDefaultLookAndFeelDecorated(true);
-		this.setIconImage(
+        OS.setLockAndFeel();
+        JXFrame.setDefaultLookAndFeelDecorated(true);
+        this.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(
 						LoginForm.class.getResource("/images/s!logo.png")));
 		this.setTitle("");
@@ -77,9 +64,9 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 		int screenHeight = gd.getDisplayMode().getHeight();
 		this.setBounds(screenWidth / 2 - 225, screenHeight / 2 - 150,
 				450, 300);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setUndecorated(true);
-		this.getRootPaneExt().getContentPane().setLayout(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.getRootPaneExt().getContentPane().setLayout(null);
 
 		setProgressbar(new JProgressBar());
 		getProgressbar().setBounds(10, 275, 430, 14);
@@ -96,12 +83,13 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 				.getResource("/images/s!logo.png")));
 		lblSasad.setBounds(10, 11, 430, 238);
 		this.getRootPaneExt().getContentPane().add(lblSasad);
-	}
+        System.gc();
+    }
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-
-	}
+        System.gc();
+    }
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
@@ -137,6 +125,7 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 	public void windowOpened(WindowEvent arg0) {
 		Core cr = new Core(getFile(), getLblForText(), Core.Mode.LOAD, getPass(), this);
 		cr.execute();
+        System.gc();
 
 //		Task tsk = new Task(getFile(), getLblForText(), Task.Mode.LOAD,
 //				getPass());
@@ -213,9 +202,9 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if ("progress" == evt.getPropertyName()) {
-			int progress = (Integer) evt.getNewValue();
-			getProgressbar().setValue(progress);
+        if (evt.getPropertyName().equals("progress")) {
+            int progress = (Integer) evt.getNewValue();
+            getProgressbar().setValue(progress);
 		}
 
 	}
