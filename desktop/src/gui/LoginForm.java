@@ -91,7 +91,7 @@ public class LoginForm {
         }
         JXFrame.setDefaultLookAndFeelDecorated(true);
         String pfad = "...";
-        String sPa = "";
+        String sPa = new String("");
         if (getOptionFile().exists()) {
             try {
                 BufferedReader br = new BufferedReader(new FileReader(getOptionFile()));
@@ -132,7 +132,10 @@ public class LoginForm {
 
         setLoginPane(new JXLoginPane());
         getLoginPane().setBounds(10, 11, 414, 164);
-        getLoginPane().setPassword(sPa.toCharArray());
+        if(sPa == null)
+        	getLoginPane().setPassword("".toCharArray());
+        else
+        	getLoginPane().setPassword(sPa.toCharArray());
         setPswdField((JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1)).getComponent(0)).getComponent(1)).getComponent(1)).getComponent(1));
         getPswdField().addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {

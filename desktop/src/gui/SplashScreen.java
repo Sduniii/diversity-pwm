@@ -9,20 +9,20 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
-import javax.swing.*;
-
-import models.Core;
+import javax.swing.ImageIcon;
+import javax.swing.JProgressBar;
+import javax.swing.WindowConstants;
 
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 
-import tools.Log;
+import models.Core;
 import tools.OS;
 
 public class SplashScreen extends JXFrame implements PropertyChangeListener, WindowListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private File file;
@@ -131,7 +131,7 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 //				getPass());
 //		tsk.addPropertyChangeListener(this);
 //		while(!tsk.isDone()){
-//			
+//
 //		}
 		//this.setCursor(null);
 		//this.dispose();
@@ -198,7 +198,7 @@ public class SplashScreen extends JXFrame implements PropertyChangeListener, Win
 	public void setProgressbar(JProgressBar progressbar) {
 		this.progressbar = progressbar;
 	}
-	
+
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

@@ -1,18 +1,18 @@
 package models;
 
-import ca.odell.glazedlists.GlazedLists;
-import ca.odell.glazedlists.swing.AutoCompleteSupport;
-
-import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.table.TableCellEditor;
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
+
+import javax.swing.AbstractCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.TableCellEditor;
+
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 
 @SuppressWarnings("serial")
 public class MyCellEditor extends AbstractCellEditor implements TableCellEditor {
@@ -66,7 +66,7 @@ public class MyCellEditor extends AbstractCellEditor implements TableCellEditor 
 
     public static class FocusHandler extends FocusAdapter {
         public void focusGained(FocusEvent evt) {
-            JComboBox cb = (JComboBox) evt.getSource();
+            JComboBox<String> cb = (JComboBox) evt.getSource();
             if (cb.isEditable()) {
                 Component editor = cb.getEditor().getEditorComponent();
                 if (editor != null) {
