@@ -3,7 +3,12 @@ package models;
 import java.awt.Component;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.EventObject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
@@ -27,6 +32,14 @@ public class MyCellEditor extends AbstractCellEditor implements TableCellEditor 
     }
 
     @Override
+    public boolean isCellEditable(EventObject e) {
+        if(e instanceof MouseEvent){
+            return ((MouseEvent)e).getClickCount() >= 2;
+        }
+        return super.isCellEditable(e);
+    }
+
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         //JXComboBox field = (JXComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
         Object[] suggestions = this.getSuggestions(table, column, value);
@@ -39,8 +52,6 @@ public class MyCellEditor extends AbstractCellEditor implements TableCellEditor 
 
         field.setEditable(true);
         field.setSelectedItem(value);
-
-        field.requestFocus();
         return field;
     }
 
