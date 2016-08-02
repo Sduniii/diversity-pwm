@@ -18,6 +18,8 @@ import javax.swing.table.TableCellEditor;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import com.sun.java.swing.plaf.windows.WindowsBorders;
+import tools.Colors;
 
 @SuppressWarnings("serial")
 public class MyCellEditor extends AbstractCellEditor implements TableCellEditor {
@@ -33,8 +35,8 @@ public class MyCellEditor extends AbstractCellEditor implements TableCellEditor 
 
     @Override
     public boolean isCellEditable(EventObject e) {
-        if(e instanceof MouseEvent){
-            return ((MouseEvent)e).getClickCount() >= 2;
+        if (e instanceof MouseEvent) {
+            return ((MouseEvent) e).getClickCount() >= 2;
         }
         return super.isCellEditable(e);
     }

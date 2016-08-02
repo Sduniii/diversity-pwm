@@ -45,23 +45,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
+import models.*;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTable;
 
-import models.Core;
 import models.Core.Mode;
-import models.JStatusbar;
-import models.MyCellEditor;
-import models.MyJPasswordPane;
-import models.MyTableModel;
-import models.PasswordCellRenderer;
-import tools.HTMLParser;
-import tools.HTMLWriter;
-import tools.Log;
-import tools.MyJFileChooser;
-import tools.OS;
+import tools.*;
 
 public class PWForm extends JXFrame implements WindowListener, PropertyChangeListener {
 
@@ -410,6 +401,7 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
         panel.add(scrollPane);
 
         table = new JXTable();
+        table.setSelectionBackground(Colors.TABLESELECTION);
         tableMouseListener = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
