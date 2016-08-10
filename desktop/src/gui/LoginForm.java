@@ -1,11 +1,10 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -17,6 +16,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -132,10 +132,10 @@ public class LoginForm {
 
         setLoginPane(new JXLoginPane());
         getLoginPane().setBounds(10, 11, 414, 164);
-        if(sPa == null)
-        	getLoginPane().setPassword("".toCharArray());
+        if (sPa == null)
+            getLoginPane().setPassword("".toCharArray());
         else
-        	getLoginPane().setPassword(sPa.toCharArray());
+            getLoginPane().setPassword(sPa.toCharArray());
         setPswdField((JPasswordField) ((JPanel) ((JPanel) ((JPanel) ((JPanel) loginPane.getComponent(1)).getComponent(0)).getComponent(1)).getComponent(1)).getComponent(1));
         getPswdField().addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -150,6 +150,23 @@ public class LoginForm {
         getFilechooser().setFileFilter(filter);
         getFilechooser().setDialogTitle("Passwort Datei ausw\u00E4hlen");
         JXButton btnFC = new JXButton();
+        btnFC.setDropTarget(new DropTarget() {
+            public synchronized void drop(DropTargetDropEvent evt) {
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    if(droppedFiles.get(0).isFile() && droppedFiles.get(0).getCanonicalPath().endsWith(".dit")) {
+                        setFile(droppedFiles.get(0));
+                        ((JXButton) getFilechooserPanel().getComponent(0)).setText(droppedFiles.get(0).getAbsolutePath());
+                    }else{
+                        JOptionPane.showMessageDialog(getFrame(),"Falsches Dateiformat!","Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                    evt.getDropTargetContext().dropComplete(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         btnFC.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
