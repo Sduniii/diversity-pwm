@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/artifacts/
+.idea/compiler.xml
+.idea/copyright/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+android/app/src/main/res/drawable/Thumbs.db
+desktop/desktop.eml
+desktop/src/META-INF/
+diversity-pwm.userlibraries
+log.txt
+opt.ini
+out/
