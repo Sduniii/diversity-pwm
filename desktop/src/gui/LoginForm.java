@@ -42,8 +42,12 @@ import tools.OS;
 import tools.SHA;
 import tools.SHA.TypeToGiveBack;
 
-public class LoginForm {
+public class LoginForm extends JXFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * global variable
 	 */
@@ -64,8 +68,8 @@ public class LoginForm {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				LoginForm window = new LoginForm();
-				window.getFrame().setVisible(true);
+				LoginForm window = new LoginForm(null);
+				window.setVisible(true);
 				window.getTxtFieldpassword().requestFocus();
 				window.getTxtFieldpassword().selectAll();
 			} catch (Exception e) {
@@ -77,14 +81,14 @@ public class LoginForm {
 	/**
 	 * Create the application.
 	 */
-	public LoginForm() {
-		initialize();
+	public LoginForm(File file) {
+		initialize(file);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(File file) {
 		// Look and Feel
 		OS.setLockAndFeel();
 
@@ -101,7 +105,7 @@ public class LoginForm {
 		initOptionFile();
 
 		// Password setzen
-		initPassword();
+		initPassword(file);
 
 		// Ok Button
 		initOkButton();
@@ -148,35 +152,34 @@ public class LoginForm {
 							if (delete)
 								optionFile.delete();
 
-							getFrame().dispose();
+							dispose();
 							System.gc();
 							new SplashScreen(new String(loginPane.getPassword()), passwordFile);
 							System.gc();
 
 						} else {
-							JOptionPane.showMessageDialog(getFrame(), "falsches Passwort!", "Fehler",
+							JOptionPane.showMessageDialog(this, "falsches Passwort!", "Fehler",
 									JOptionPane.ERROR_MESSAGE);
 						}
 					} else {
-						JOptionPane.showMessageDialog(getFrame(), "Datei existiert nicht!", "Fehler",
+						JOptionPane.showMessageDialog(this, "Datei existiert nicht!", "Fehler",
 								JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
-					JOptionPane.showMessageDialog(getFrame(), "keine Datei ausgew\u00E4hlt!", "Fehler",
+					JOptionPane.showMessageDialog(this, "keine Datei ausgew\u00E4hlt!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			} else {
 				if (passwordFile == null) {
-					JOptionPane.showMessageDialog(getFrame(), "Datei existiert nicht!", "Fehler",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Datei existiert nicht!", "Fehler", JOptionPane.ERROR_MESSAGE);
 				} else if (passwordFile.exists()) {
-					JOptionPane.showMessageDialog(getFrame(), "Datei existiert bereits!", "Fehler",
+					JOptionPane.showMessageDialog(this, "Datei existiert bereits!", "Fehler",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					if (passwordFile != null) {
 						fileCreated();
 					} else {
-						if (fileChooser.showSaveDialog(getFrame()) == JFileChooser.APPROVE_OPTION) {
+						if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 							passwordFile = fileChooser.getSelectedFile();
 							((JXButton) fileChooserPanel.getComponent(0)).setText(passwordFile.getAbsolutePath());
 							fileCreated();
@@ -197,10 +200,10 @@ public class LoginForm {
 						TypeToGiveBack.HEXSTRING);
 				sss = (String) SHA.getHash(sss, "Sha-512", TypeToGiveBack.HEXSTRING);
 				CreateFile.startCreate(passwordFile.getAbsolutePath() + "tmp", passwordFile.getAbsolutePath(), sss);
-				JOptionPane.showMessageDialog(getFrame(), "Datei erstellt!", "OK", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Datei erstellt!", "OK", JOptionPane.INFORMATION_MESSAGE);
 				swapToLogin();
 			} else {
-				JOptionPane.showMessageDialog(getFrame(), "Passwort zu klein!", "Fehler", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Passwort zu klein!", "Fehler", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -220,17 +223,16 @@ public class LoginForm {
 
 	// INITS
 	private void initFrame() {
-		frame = new JXFrame();
-		frame.setResizable(false);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
-		frame.setTitle("diversityPWM");
+		setResizable(false);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginForm.class.getResource("/images/s!logo.png")));
+		setTitle("diversityPWM");
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int screenWidth = gd.getDisplayMode().getWidth();
 		int screenHeight = gd.getDisplayMode().getHeight();
-		frame.setBounds(screenWidth / 2 - 220, screenHeight / 2 - 133, 440, 266);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.getRootPaneExt().getContentPane().setLayout(null);
-		frame.addKeyListener(new KeyAdapter() {
+		setBounds(screenWidth / 2 - 220, screenHeight / 2 - 133, 440, 266);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		getRootPaneExt().getContentPane().setLayout(null);
+		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
 				if (key == KeyEvent.VK_ENTER) {
@@ -244,7 +246,7 @@ public class LoginForm {
 	private void initLoginPane() {
 		loginPane = new JXLoginPane();
 		loginPane.setBounds(10, 11, 414, 164);
-		frame.getRootPaneExt().getContentPane().add(loginPane);
+		getRootPaneExt().getContentPane().add(loginPane);
 	}
 
 	private void initFileChooser() {
@@ -256,7 +258,7 @@ public class LoginForm {
 		fileChooser.setDialogTitle("Passwort Datei ausw\u00E4hlen");
 
 		fileChooserButton = new JXButton();
-		fileChooserButton.setDropTarget(new MyDropTarget(passwordFile, fileChooserPanel, frame));
+		fileChooserButton.setDropTarget(new MyDropTarget(passwordFile, fileChooserPanel, this));
 		fileChooserButton.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyCode();
@@ -288,12 +290,11 @@ public class LoginForm {
 				new File(path).mkdirs();
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
 
-	private void initPassword() {
+	private void initPassword(File file) {
 		HashMap<String, Object> map = GuiTools.readOptionFile(optionFile);
 		if (map.get("password") == null)
 			loginPane.setPassword("".toCharArray());
@@ -301,7 +302,11 @@ public class LoginForm {
 			loginPane.setPassword(((String) map.get("password")).toCharArray());
 		}
 		if (map.get("file") != null) {
-			passwordFile = ((File) map.get("file"));
+			// Wenn Passwortfile Übergeben, setze dieses File
+			if (file == null)
+				passwordFile = ((File) map.get("file"));
+			else
+				passwordFile = file;
 			fileChooserButton.setText(passwordFile.getAbsolutePath());
 		}
 
@@ -323,7 +328,7 @@ public class LoginForm {
 		btnOk.setText("OK");
 		btnOk.setBounds(334, 208, 90, 23);
 
-		frame.getRootPaneExt().getContentPane().add(btnOk);
+		getRootPaneExt().getContentPane().add(btnOk);
 	}
 
 	private void initNewUserLink() {
@@ -352,7 +357,7 @@ public class LoginForm {
 		hprlnkNeuerBenutzer.setUnclickedColor(Color.GREEN);
 		hprlnkNeuerBenutzer.setClickedColor(Color.GREEN);
 
-		frame.getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
+		getRootPaneExt().getContentPane().add(hprlnkNeuerBenutzer);
 	}
 
 	private void initCheckboxes() {
@@ -360,21 +365,21 @@ public class LoginForm {
 		chckbxPasswortSpeichern.setBounds(10, 208, 123, 23);
 		if (loginPane.getPassword() != null && !loginPane.getPassword().equals(""))
 			chckbxPasswortSpeichern.setSelected(true);
-		frame.getRootPaneExt().getContentPane().add(chckbxPasswortSpeichern);
+		getRootPaneExt().getContentPane().add(chckbxPasswortSpeichern);
 
 		chckbxDateipfadMerken = new JCheckBox("Dateipfad merken?");
 		chckbxDateipfadMerken.setSelected(true);
 		chckbxDateipfadMerken.setBounds(10, 182, 123, 23);
 
-		frame.getRootPaneExt().getContentPane().add(chckbxDateipfadMerken);
+		getRootPaneExt().getContentPane().add(chckbxDateipfadMerken);
 	}
 
 	private void fileChooserAction() {
 		int returnVal;
 		if (loginPane.getBannerText().trim().equals("Anmeldung")) {
-			returnVal = fileChooser.showOpenDialog(frame);
+			returnVal = fileChooser.showOpenDialog(this);
 		} else {
-			returnVal = fileChooser.showSaveDialog(frame);
+			returnVal = fileChooser.showSaveDialog(this);
 		}
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			passwordFile = fileChooser.getSelectedFile();
@@ -395,13 +400,6 @@ public class LoginForm {
 		} else {
 			fileChooser.setCurrentDirectory(passwordFile);
 		}
-	}
-
-	// Getter
-	private JXFrame frame;
-
-	public JXFrame getFrame() {
-		return frame;
 	}
 
 	public JPasswordField getTxtFieldpassword() {
