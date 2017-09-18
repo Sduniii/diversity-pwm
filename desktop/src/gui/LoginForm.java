@@ -302,7 +302,7 @@ public class LoginForm extends JXFrame {
 			loginPane.setPassword(((String) map.get("password")).toCharArray());
 		}
 		if (map.get("file") != null) {
-			// Wenn Passwortfile Übergeben, setze dieses File
+			// Wenn Passwortfile Ãœbergeben, setze dieses File
 			if (file == null)
 				passwordFile = ((File) map.get("file"));
 			else

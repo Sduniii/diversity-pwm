@@ -16,7 +16,16 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class PasswordCellRenderer extends DefaultTableCellRenderer {
 
     private static final long serialVersionUID = -951373305548156059L;
-    private JPasswordField pwField = new JPasswordField();
+    private JPasswordField pwField;
+
+    public PasswordCellRenderer(){
+        super();
+        pwField = new JPasswordField();
+    }
+
+    public JPasswordField getPwField() {
+        return pwField;
+    }
 
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected, boolean hasFocus, int row, int column) {
