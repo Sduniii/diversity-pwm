@@ -46,7 +46,7 @@ import models.MyTableModel;
 import models.PasswordCellRenderer;
 import tools.Colors;
 import tools.HTMLParser;
-import tools.HTMLWriter;
+import tools.ExportWriter;
 import tools.Log;
 import tools.MyJFileChooser;
 import tools.OS;
@@ -243,10 +243,42 @@ public class PWForm extends JXFrame implements WindowListener, PropertyChangeLis
                         // System.out.println(tr.getLast());
                     }
                 }
-                HTMLWriter.write(list, eFile);
+                ExportWriter.writeHtml(list, eFile);
+                leftLabel.setText("Expotiert");
             }
         });
         mnExport.add(mntmHtml_1);
+
+        JMenuItem mntmHtml_2 = new JMenuItem("CSV");
+        mntmHtml_2.addActionListener(e -> {
+            File eFile = null;
+            MyJFileChooser fc = new MyJFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Dateien (*.csv)", "csv");
+            fc.setFileFilter(filter);
+            fc.setDialogTitle("Exportieren ...");
+            int returnVal = fc.showSaveDialog(getFrame());
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                eFile = fc.getSelectedFile();
+                if ((!eFile.getName().endsWith(".csv"))
+                        && !fc.getFileFilter().accept(eFile)) {
+                    if (fc.getDialogType() == JFileChooser.SAVE_DIALOG) {
+                        eFile = new File(eFile.getAbsolutePath() + ".csv");
+                    }
+                }
+                LinkedList<LinkedList<String>> list = new LinkedList<>();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    LinkedList<String> row = new LinkedList<>();
+                    for (int j = 0; j < model.getColumnCount(); j++) {
+                        row.add(model.getValueAt(i, j).toString());
+                        list.add(row);
+                    }
+                }
+                ExportWriter.writeCSV(list, eFile);
+                leftLabel.setText("Expotiert");
+            }
+        });
+        mnExport.add(mntmHtml_2);
+
         mnDatei.add(mntmPasswortndern);
         mnDatei.add(mntmbeenden);
 
